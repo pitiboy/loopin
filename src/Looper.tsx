@@ -5,9 +5,14 @@ interface BeatStylesProps {
   active: boolean;
 }
 
+const RythmStyles = styled.div`
+  display: flex;
+`;
+
 const BeatStyles = styled.div<BeatStylesProps>`
   ${props => props.active && `
     color: green;
+    font-weight: bold;
   `}
 `;
 
@@ -79,10 +84,8 @@ export default ({
   }, [step, looping]);
 
   return (
-    <div>TODO: settings for looper
-      step: {rythmLength}
-      step: {getStep}
+    <RythmStyles>
       {getPlayBeat.map((beat, index) => <BeatStyles active={index === getStep}>{beat}</BeatStyles>)}
-    </div>
+    </RythmStyles>
   );
 };

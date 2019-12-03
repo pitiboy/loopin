@@ -14,15 +14,10 @@ const App: React.FC = () => {
       midiSounds.current.playChordNow(3, [41], 2.5);
     }
   }
-  const What = ({step}:{ step?: number }) => {
-    return <div>step: {step}</div>;
-  }
   return (
     <div className="App">
       <button onClick={() => playPiano()}>Play</button>
       <Metronome>
-        <What />
-        <What />
         <Looper playType={PlayTypes.odd} source={() => drum2.current && drum2.current.playDrumsNow([1])} />
         <Looper playType={PlayTypes.even} source={() => drum.current && drum.current.playDrumsNow([16])} />
         <Looper playType={PlayTypes.even} bpm={240} source={() => drum.current && drum.current.playDrumsNow([39])} />

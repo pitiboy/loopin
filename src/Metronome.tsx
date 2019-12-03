@@ -20,7 +20,7 @@ export default ({
 }: LooperProps) => {
   const [start, setStart] = useState(new Date());
   const [step, setStep] = useState(0);
-  const [metronome, setMetronome] = useState<NodeJS.Timeout>();
+  const [metronome, setMetronome] = useState<number>(); // NodeJS.Timeout
   const interval = 60 / bpm * 1000;
 
   const init = () => {
