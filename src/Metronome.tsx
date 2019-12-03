@@ -5,6 +5,7 @@ export interface LooperProps {
   looping?: boolean;
   source?: () => void;
   rythmLength?: number;
+  rythmDevider?: number;
   children: JSX.Element | JSX.Element[];
 }
 
@@ -16,21 +17,24 @@ export default ({
   bpm = defaultBPM,
   looping = true,
   rythmLength = defaultRrythmLength,
+  rythmDevider = 8,
   children,
 }: LooperProps) => {
   const [start, setStart] = useState(new Date());
-  const [step, setStep] = useState(0);
+  const [step, setStep] = useState('');
   const [metronome, setMetronome] = useState<number>(); // NodeJS.Timeout
-  const interval = 60 / bpm * 1000;
+  const interval = 60 / bpm * 1000; // we want to have /2, /4, /8 support
 
   const init = () => {
     setStart(new Date());
   }
 
   const calculateStep = () => {
-    const step = Math.floor((new Date().getTime() - start.getTime()) / interval) % rythmLength;
-    // console.log('calculateStep', step);
-    setStep(step);
+    const diff = (new Date().getTime() - start.getTime()) / interval;
+    const newStep = Math.floor(diff) % rythmLength;
+    const divider = Math.floor((diff - Math.floor(diff)) * rythmLength) / 8;
+    // console.log('step + divider', step, newStep + divider);
+    setStep(`${newStep + divider}`);
   }
 
   useEffect(() => {
@@ -38,18 +42,20 @@ export default ({
       init();
       // TODO: refactor metronome to global
       if (metronome) clearTimeout(metronome);
-      setMetronome(setInterval(() => calculateStep(), interval));
+      // console.log('interval / rythmDevider', interval / rythmDevider);
+      setMetronome(setInterval(() => calculateStep(), interval / rythmDevider));
     }
   }, [interval, looping]);
 
   const newChildren = React.Children.map(children, child => React.cloneElement(child, {
-    step,
+    metronomeBpm: bpm,
+    step: parseFloat(step),
     rythmLength,
-  }))
+  }));
 
   return (
     <>
-      {newChildren.map((Child, key) => Child)}
+      {newChildren}
     </>
   );
 };

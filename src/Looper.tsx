@@ -27,6 +27,8 @@ export enum PlayTypes {
 export interface GetPlayBeatProps {
   playType?: PlayTypes,
   playBeat?: number[],
+  bpm?: number;
+  metronomeBpm?: number;
 }
 
 export interface LooperProps extends GetPlayBeatProps {
@@ -38,6 +40,8 @@ export interface LooperProps extends GetPlayBeatProps {
 }
 
 export default ({
+  bpm,
+  metronomeBpm,
   looping = true,
   rythmLength,
   playType = PlayTypes.odd,
@@ -45,47 +49,46 @@ export default ({
   source,
   step,
 }: LooperProps) => {
-  const getStep = step || 0;
+  const multiplier = (bpm && metronomeBpm && bpm / metronomeBpm) || 1;
+  const getStep = (step || 0) * multiplier;
+  console.log('getStep', getStep);
 
   // TODO: refactor & test
-  const generatePlayBeat = ({ playBeat, playType }: GetPlayBeatProps) => {
-    if (playBeat) return playBeat
+  const generatePlayBeat = ({ playBeat, playType, bpm, metronomeBpm }: GetPlayBeatProps) => {
+    if (playBeat) return playBeat;
+    const length = (rythmLength || 0) * multiplier;
     switch (playType) {
     case PlayTypes.odd:
-      return new Array(rythmLength).fill(0).map((_qwe, index) => 1 - (index % 2));
+      return new Array(length).fill(0).map((_qwe, index) => 1 - (index % 2));
     case PlayTypes.even:
-      return new Array(rythmLength).fill(0).map((_qwe, index) => index % 2);
+      return new Array(length).fill(0).map((_qwe, index) => index % 2);
     case PlayTypes.first:
-      return new Array(rythmLength).fill(0).map((_qwe, index) => index === 0);
+      return new Array(length).fill(0).map((_qwe, index) => index === 0);
     case PlayTypes.last:
-      return new Array(rythmLength).fill(0).map((_qwe, index) => index === 0);
+      return new Array(length).fill(0).map((_qwe, index) => index === 0);
     case PlayTypes.all:
     default:
-      return new Array(rythmLength).fill(1);
+      return new Array(length).fill(1);
     }
   }
-  const getPlayBeat = generatePlayBeat({ playBeat, playType });
-  console.log('generatePlayBeat', getPlayBeat);
+  const getPlayBeat = generatePlayBeat({ playBeat, playType, bpm, metronomeBpm });
 
   const playSource = () => {
-    console.log('getPlayBeat[getStep] && source', getPlayBeat[getStep], source);
     if(getPlayBeat[getStep] && source) {
-      console.log('play')
+      // console.log('getPlayBeat[getStep]', getStep, getPlayBeat[getStep]);
       source();
     }
   }
 
   useEffect(() => {
-    console.log('useeffect', looping);
     if (looping) {
-      console.log('useeffect playSource');
       playSource();
     }
   }, [step, looping]);
 
   return (
     <RythmStyles>
-      {getPlayBeat.map((beat, index) => <BeatStyles active={index === getStep}>{beat}</BeatStyles>)}
+      {getPlayBeat.map((beat, index) => <BeatStyles active={index === getStep} key={index}>{beat}</BeatStyles>)}
     </RythmStyles>
   );
 };
