@@ -51,7 +51,6 @@ export default ({
 }: LooperProps) => {
   const multiplier = (bpm && metronomeBpm && bpm / metronomeBpm) || 1;
   const getStep = (step || 0) * multiplier;
-  console.log('getStep', getStep);
 
   // TODO: refactor & test
   const generatePlayBeat = ({ playBeat, playType, bpm, metronomeBpm }: GetPlayBeatProps) => {

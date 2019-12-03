@@ -11,7 +11,7 @@ export interface LooperProps {
 
 const defaultRrythmLength = 8;
 // TODO: half & quarter rythm support
-const defaultBPM = 60;
+export const defaultBPM = 60;
 
 export default ({
   bpm = defaultBPM,
@@ -21,7 +21,7 @@ export default ({
   children,
 }: LooperProps) => {
   const [start, setStart] = useState(new Date());
-  const [step, setStep] = useState('');
+  const [step, setStep] = useState(0.0);
   const [metronome, setMetronome] = useState<number>(); // NodeJS.Timeout
   const interval = 60 / bpm * 1000; // we want to have /2, /4, /8 support
 
@@ -34,7 +34,7 @@ export default ({
     const newStep = Math.floor(diff) % rythmLength;
     const divider = Math.floor((diff - Math.floor(diff)) * rythmLength) / 8;
     // console.log('step + divider', step, newStep + divider);
-    setStep(`${newStep + divider}`);
+    setStep(parseFloat(`${newStep + divider}`));
   }
 
   useEffect(() => {
@@ -49,7 +49,7 @@ export default ({
 
   const newChildren = React.Children.map(children, child => React.cloneElement(child, {
     metronomeBpm: bpm,
-    step: parseFloat(step),
+    step: step,
     rythmLength,
   }));
 
