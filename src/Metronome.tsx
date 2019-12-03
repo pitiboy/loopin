@@ -34,7 +34,7 @@ export default ({
     const newStep = Math.floor(diff) % rythmLength;
     const divider = Math.floor((diff - Math.floor(diff)) * rythmLength) / 8;
     // console.log('step + divider', step, newStep + divider);
-    setStep(parseFloat(`${newStep + divider}`));
+    setStep(newStep + divider);
   }
 
   useEffect(() => {
