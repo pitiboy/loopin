@@ -30,8 +30,17 @@ export const BeatStyles = styled.button<BeatStylesProps>`
   `}
 `;
 
-export default ({ playBeat, step }: LooperRendererProps) => (
-  <RythmStyles>
-    {(playBeat && playBeat.map((beat, index) => <BeatStyles active={index === step} enabled={beat > 0} key={index} onClick={() => console.log('toggle', index)} />)) || null}
-  </RythmStyles>
-);
+
+export default ({ playBeat, step, setPlayBeat }: LooperRendererProps) => {
+  const updateBeat = (index: number) => {
+    if (!setPlayBeat) return ;
+    const newPlayBeat = playBeat.slice();
+    newPlayBeat[index] = !newPlayBeat[index] ? 1 : 0;
+    setPlayBeat(newPlayBeat)
+  };
+  return (
+    <RythmStyles>
+      {(playBeat && playBeat.map((beat, index) => <BeatStyles active={index === step} enabled={beat > 0} key={index} onClick={() => updateBeat(index)} />)) || null}
+    </RythmStyles>
+  );
+}

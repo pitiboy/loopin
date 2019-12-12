@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import DefaultLooperRenderer from './DefaultLooperRenderer';
 
 export interface BeatStylesProps {
@@ -7,13 +7,10 @@ export interface BeatStylesProps {
 }
 
 
-export interface PlayBeatProps {
-  playBeat?: number[];
-}
-
-export interface LooperRendererProps extends PlayBeatProps{
-  playBeat?: number[];
+export interface LooperRendererProps {
+  playBeat: number[];
   step: number;
+  setPlayBeat?: (playBeat: number[]) => void;
 }
 
 export enum PlayTypes {
@@ -30,21 +27,22 @@ export interface BasicLooperProps {
   rythmLength?: number; // needs to be injected
 }
 
-export interface GetPlayBeatProps extends BasicLooperProps {
+export interface GeneratePlayBeatProps extends BasicLooperProps {
   multiplier: number; // needs to be injected
 }
 
-export interface LooperProps extends BasicLooperProps, PlayBeatProps {
+export interface LooperProps extends BasicLooperProps {
   bpm?: number;
   looping?: boolean;
   source?: () => void;
   step?: number; // needs to be injected
   metronomeBpm?: number;
-  render?: ({ playBeat, step }: LooperRendererProps) => JSX.Element;
+  render?: (props: LooperRendererProps) => JSX.Element;
+  playBeat?: number[];
 }
 
 
-const generatePlayBeat = ({ playType, rythmLength, multiplier }: GetPlayBeatProps) => {
+const generatePlayBeat = ({ playType, rythmLength, multiplier }: GeneratePlayBeatProps) => {
   const length = (rythmLength || 0) * multiplier;
   switch (playType) {
   case PlayTypes.odd:
@@ -67,7 +65,7 @@ export default ({
   looping = true,
   rythmLength,
   playType = PlayTypes.odd,
-  playBeat,
+  playBeat: originalPlayBeat,
   source,
   step,
   render: renderProp,
@@ -75,13 +73,10 @@ export default ({
   const multiplier = (bpm && metronomeBpm && bpm / metronomeBpm) || 1;
   const getStep = (step || 0) * multiplier;
   const LooperRenderer = renderProp || DefaultLooperRenderer;
-
-  // TODO: useState
-  const getPlayBeat = playBeat || generatePlayBeat({ playType, rythmLength, multiplier });
+  const [playBeat, setPlayBeat] = useState(originalPlayBeat|| generatePlayBeat({ playType, rythmLength, multiplier }));
 
   const playSource = () => {
-    if(getPlayBeat[getStep] && source) {
-      // console.log('getPlayBeat[getStep]', getStep, getPlayBeat[getStep]);
+    if(playBeat[getStep] && source) {
       source();
     }
   }
@@ -93,6 +88,6 @@ export default ({
   }, [step, looping]);
 
   return (
-    <LooperRenderer playBeat={getPlayBeat} step={getStep} />
+    <LooperRenderer playBeat={playBeat} step={getStep} setPlayBeat={(playBeat) => setPlayBeat(playBeat)} />
   );
 };

@@ -34,3 +34,4 @@ general control panel
     first track (or line) could be the animated timer track for metronome
     bpm speed adjustment
     display counter
+save & load music
