@@ -38,6 +38,7 @@ make tracks in grid
     <!-- https://github.com/lillydinhle/react-piano-component -->
 general control panel
   metronome
+    provider step as Context, and useContext in Looper
     first track (or line) could be the animated timer track for metronome
     bpm speed adjustment
     display counter

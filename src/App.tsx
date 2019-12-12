@@ -35,8 +35,8 @@ const App: React.FC = () => {
 
         <Section title="Bass">
           <MIDISounds ref={midiBass} appElementName="root" instruments={[376]} />
-          <Looper playType={PlayTypes.odd} bpm={myBPM * 4} source={() => midiBass.current && midiBass.current.playChordNow(376, [30], 1)} render={SquareLooperRenderer} />
         </Section>
+        <Looper playType={PlayTypes.odd} bpm={myBPM * 4} source={() => midiBass.current && midiBass.current.playChordNow(376, [30], 1)} render={SquareLooperRenderer} />
       </Metronome>
 
 
