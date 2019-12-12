@@ -1,6 +1,6 @@
 declare module 'midi-sounds-react';
 
 interface MIDISoundsType {
-  playChordNow: (a: number, b: [number], c: number) => void;
-  playDrumsNow: (a: [number]) => void;
+  playChordNow: (instrument: number, pitches: [number], duration: number) => void;
+  playDrumsNow: (drums: [number]) => void;
 }

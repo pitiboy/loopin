@@ -5,32 +5,34 @@ import Looper, { PlayTypes } from './Looper';
 import './App.css';
 import Metronome, { defaultBPM } from './Metronome';
 import SquareLooperRenderer from './SquareLooperRenderer';
+import Section from './Layout/Section';
 
 const App: React.FC = () => {
-  const midiSounds = useRef<MIDISoundsType>(null);
-  const drum = useRef<MIDISoundsType>(null);
-  const drum2 = useRef<MIDISoundsType>(null);
+  const midiKeys = useRef<MIDISoundsType>(null);
+  const midiDrums = useRef<MIDISoundsType>(null);
+  // TODO: strings Keys, , Strings
   const playPiano = () => {
-    if (midiSounds !== null && midiSounds.current !== null) {
-      midiSounds.current.playChordNow(1, [41], 1);
+    if (midiDrums !== null && midiDrums.current !== null) {
+      midiDrums.current.playChordNow(10, [30], 1);
     }
   }
   const myBPM = 80;
   return (
     <div className="App">
-      <button onClick={() => playPiano()}>Play</button>
       <Metronome bpm={myBPM}>
-        <Looper playType={PlayTypes.oddQuarter} bpm={myBPM * 2} source={() => drum2.current && drum2.current.playDrumsNow([1])} render={SquareLooperRenderer} />
-        <Looper playBeat={[0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1]} bpm={myBPM * 2} source={() => drum2.current && drum2.current.playDrumsNow([1])} render={SquareLooperRenderer} />
-        <Looper playType={PlayTypes.even} source={() => drum.current && drum.current.playDrumsNow([16])} render={SquareLooperRenderer} />
-        <Looper playType={PlayTypes.even} bpm={myBPM * 4} source={() => drum.current && drum.current.playDrumsNow([39])} render={SquareLooperRenderer} />
+        <Section title="Drums">
+          <MIDISounds ref={midiDrums} appElementName="root" drums={[1, 16, 39]} />
+        </Section>
+        <Looper playType={PlayTypes.oddQuarter} bpm={myBPM * 2} source={() => midiDrums.current && midiDrums.current.playDrumsNow([1])} render={SquareLooperRenderer} />
+        <Looper playBeat={[0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1]} bpm={myBPM * 2} source={() => midiDrums.current && midiDrums.current.playDrumsNow([1])} render={SquareLooperRenderer} />
+        <Looper playType={PlayTypes.even} source={() => midiDrums.current && midiDrums.current.playDrumsNow([16])} render={SquareLooperRenderer} />
+        <Looper playType={PlayTypes.even} bpm={myBPM * 4} source={() => midiDrums.current && midiDrums.current.playDrumsNow([39])} render={SquareLooperRenderer} />
       </Metronome>
-      {/* <Looper looping playEach={2} oscillator={{ frequency: 300, duration: 0.5 }} /> */}
 
-      <MIDISounds ref={midiSounds} appElementName="root" instruments={[3]} />
-      <MIDISounds ref={drum} appElementName="root" drums={[39]} />
-      <MIDISounds ref={drum} appElementName="root" drums={[16]} />
-      <MIDISounds ref={drum2} appElementName="root" drums={[1]} />
+      <Section title="Keys">
+        <MIDISounds ref={midiKeys} appElementName="root" instruments={[1,2,3,10]} />
+        <button onMouseDown={() => playPiano()}>Play</button>
+      </Section>
     </div>
   );
 }

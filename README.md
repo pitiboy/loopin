@@ -4,7 +4,6 @@ https://github.com/wmonk/create-react-app-typescript
 https://codeburst.io/hello-create-react-app-cra-typescript-8e04f7012939
 
 #### sound
-https://www.npmjs.com/package/react-mic
 <!-- https://surikov.github.io/midi-sounds-react/ -->
 <!-- https://libraries.io/npm/react-looper/0.2.6 -->
 <!-- https://github.com/mmckegg/loop-drop-app -->
@@ -22,13 +21,19 @@ track control
   add simple [cta] to the end of the track
 record
   mic
+    https://www.npmjs.com/package/react-mic
   aux
 make tracks in grid
   different type of instruments
     drums
     bass
-    vocals
+    strings
+    keys
+    Brass?
+    Pads?
   use piano keyboard
+    https://github.com/kevinsqi/react-piano
+    https://github.com/lillydinhle/react-piano-component
 general control panel
   metronome
     first track (or line) could be the animated timer track for metronome
