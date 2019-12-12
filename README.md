@@ -31,5 +31,6 @@ make tracks in grid
   use piano keyboard
 general control panel
   metronome
+    first track (or line) could be the animated timer track for metronome
     bpm speed adjustment
     display counter

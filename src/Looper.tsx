@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
-import styled from 'styled-components';
+import DefaultLooperRenderer from './DefaultLooperRenderer';
 
-interface BeatStylesProps {
+export interface BeatStylesProps {
   active: boolean;
+  enabled?: boolean;
 }
 
 
@@ -43,25 +44,6 @@ export interface LooperProps extends BasicLooperProps, PlayBeatProps {
 }
 
 
-const DefaultRythmStyles = styled.div`
-  display: flex;
-`;
-
-const DefaultBeatStyles = styled.div<BeatStylesProps>`
-  ${props => props.active && `
-    color: green;
-    font-weight: bold;
-  `}
-`;
-
-
-const DefaultLooperRenderer = ({ playBeat, step }: LooperRendererProps) => (
-  <DefaultRythmStyles>
-    {(playBeat && playBeat.map((beat, index) => <DefaultBeatStyles active={index === step} key={index}>{beat}</DefaultBeatStyles>)) || null}
-  </DefaultRythmStyles>
-);
-
-
 const generatePlayBeat = ({ playType, rythmLength, multiplier }: GetPlayBeatProps) => {
   const length = (rythmLength || 0) * multiplier;
   switch (playType) {
@@ -94,6 +76,7 @@ export default ({
   const getStep = (step || 0) * multiplier;
   const LooperRenderer = renderProp || DefaultLooperRenderer;
 
+  // TODO: useState
   const getPlayBeat = playBeat || generatePlayBeat({ playType, rythmLength, multiplier });
 
   const playSource = () => {

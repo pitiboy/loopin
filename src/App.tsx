@@ -4,6 +4,7 @@ import MIDISounds from 'midi-sounds-react';
 import Looper, { PlayTypes } from './Looper';
 import './App.css';
 import Metronome, { defaultBPM } from './Metronome';
+import SquareLooperRenderer from './SquareLooperRenderer';
 
 const App: React.FC = () => {
   const midiSounds = useRef<MIDISoundsType>(null);
@@ -19,9 +20,9 @@ const App: React.FC = () => {
     <div className="App">
       <button onClick={() => playPiano()}>Play</button>
       <Metronome bpm={myBPM}>
-        <Looper playType={PlayTypes.odd} source={() => drum2.current && drum2.current.playDrumsNow([1])} />
-        <Looper playType={PlayTypes.even} source={() => drum.current && drum.current.playDrumsNow([16])} />
-        <Looper playType={PlayTypes.even} bpm={myBPM * 4} source={() => drum.current && drum.current.playDrumsNow([39])} />
+        <Looper playType={PlayTypes.odd} source={() => drum2.current && drum2.current.playDrumsNow([1])} render={SquareLooperRenderer} />
+        <Looper playType={PlayTypes.even} source={() => drum.current && drum.current.playDrumsNow([16])} render={SquareLooperRenderer} />
+        <Looper playType={PlayTypes.even} bpm={myBPM * 4} source={() => drum.current && drum.current.playDrumsNow([39])} render={SquareLooperRenderer} />
       </Metronome>
       {/* <Looper looping playEach={2} oscillator={{ frequency: 300, duration: 0.5 }} /> */}
 
