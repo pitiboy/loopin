@@ -6,14 +6,18 @@ import './App.css';
 import Metronome, { defaultBPM } from './Metronome';
 import SquareLooperRenderer from './SquareLooperRenderer';
 import Section from './Layout/Section';
+import PianoKeyboard from './Layout/PianoKeyboard';
+
 
 const App: React.FC = () => {
   const midiKeys = useRef<MIDISoundsType>(null);
   const midiDrums = useRef<MIDISoundsType>(null);
   // TODO: strings Keys, , Strings
-  const playPiano = () => {
+  const playChord = (pitches: number | number[]) => {
     if (midiDrums !== null && midiDrums.current !== null) {
-      midiDrums.current.playChordNow(10, [30], 1);
+      const defaultPitches: number[] = [];
+      const playPitches = defaultPitches.concat(pitches);
+      midiDrums.current.playChordNow(305, playPitches, 1);
     }
   }
   const myBPM = 80;
@@ -30,9 +34,10 @@ const App: React.FC = () => {
       </Metronome>
 
       <Section title="Keys">
-        <MIDISounds ref={midiKeys} appElementName="root" instruments={[1,2,3,10]} />
-        <button onMouseDown={() => playPiano()}>Play</button>
+        <MIDISounds ref={midiKeys} appElementName="root" instruments={[1,2,3,305]} />
       </Section>
+
+      <PianoKeyboard playNote={(note) => playChord(note)} />
     </div>
   );
 }

@@ -32,8 +32,8 @@ make tracks in grid
     Brass?
     Pads?
   use piano keyboard
-    https://github.com/kevinsqi/react-piano
-    https://github.com/lillydinhle/react-piano-component
+    <!-- https://github.com/kevinsqi/react-piano -->
+    <!-- https://github.com/lillydinhle/react-piano-component -->
 general control panel
   metronome
     first track (or line) could be the animated timer track for metronome
