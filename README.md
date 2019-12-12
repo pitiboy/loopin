@@ -14,10 +14,10 @@ https://www.npmjs.com/package/react-mic
 
 ### todo
 track control
-  control view with render props
+  <!-- control view with render props -->
   select the sound
-  preselected rythms
-  turn on or off a track
+  choose from preselected rythms
+  mute a track
   indicate name for related MIDI SOUNDS svg
   add simple [cta] to the end of the track
 record
