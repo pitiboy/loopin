@@ -5,17 +5,6 @@ interface BeatStylesProps {
   active: boolean;
 }
 
-const RythmStyles = styled.div`
-  display: flex;
-`;
-
-const BeatStyles = styled.div<BeatStylesProps>`
-  ${props => props.active && `
-    color: green;
-    font-weight: bold;
-  `}
-`;
-
 
 export interface PlayBeatProps {
   playBeat?: number[];
@@ -26,12 +15,6 @@ export interface LooperRendererProps extends PlayBeatProps{
   step: number;
 }
 
-const DefaultLooperRenderer = ({ playBeat, step }: LooperRendererProps) => (
-  <RythmStyles>
-    {(playBeat && playBeat.map((beat, index) => <BeatStyles active={index === step} key={index}>{beat}</BeatStyles>)) || null}
-  </RythmStyles>
-);
-
 export enum PlayTypes {
   all = "all",
   odd = "odd",
@@ -39,7 +22,6 @@ export enum PlayTypes {
   first = "first",
   last = "last",
 }
-
 
 
 export interface BasicLooperProps {
@@ -57,7 +39,28 @@ export interface LooperProps extends BasicLooperProps, PlayBeatProps {
   source?: () => void;
   step?: number; // needs to be injected
   metronomeBpm?: number;
+  render?: ({ playBeat, step }: LooperRendererProps) => JSX.Element;
 }
+
+
+const DefaultRythmStyles = styled.div`
+  display: flex;
+`;
+
+const DefaultBeatStyles = styled.div<BeatStylesProps>`
+  ${props => props.active && `
+    color: green;
+    font-weight: bold;
+  `}
+`;
+
+
+const DefaultLooperRenderer = ({ playBeat, step }: LooperRendererProps) => (
+  <DefaultRythmStyles>
+    {(playBeat && playBeat.map((beat, index) => <DefaultBeatStyles active={index === step} key={index}>{beat}</DefaultBeatStyles>)) || null}
+  </DefaultRythmStyles>
+);
+
 
 const generatePlayBeat = ({ playType, rythmLength, multiplier }: GetPlayBeatProps) => {
   const length = (rythmLength || 0) * multiplier;
@@ -85,9 +88,11 @@ export default ({
   playBeat,
   source,
   step,
+  render: renderProp,
 }: LooperProps) => {
   const multiplier = (bpm && metronomeBpm && bpm / metronomeBpm) || 1;
   const getStep = (step || 0) * multiplier;
+  const LooperRenderer = renderProp || DefaultLooperRenderer;
 
   const getPlayBeat = playBeat || generatePlayBeat({ playType, rythmLength, multiplier });
 
@@ -105,6 +110,6 @@ export default ({
   }, [step, looping]);
 
   return (
-    <DefaultLooperRenderer playBeat={getPlayBeat} step={getStep} />
+    <LooperRenderer playBeat={getPlayBeat} step={getStep} />
   );
 };
