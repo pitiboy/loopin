@@ -27,11 +27,13 @@ make tracks in grid
   different type of instruments
     drums
     bass
+      merge multiple columns
     strings
+      merge multiple columns
     keys
     Brass?
     Pads?
-  use piano keyboard
+  <!-- use piano keyboard -->
     <!-- https://github.com/kevinsqi/react-piano -->
     <!-- https://github.com/lillydinhle/react-piano-component -->
 general control panel

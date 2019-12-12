@@ -3,7 +3,7 @@ import MIDISounds from 'midi-sounds-react';
 // import Looper from 'react-looper';
 import Looper, { PlayTypes } from './Looper';
 import './App.css';
-import Metronome, { defaultBPM } from './Metronome';
+import Metronome, { defaultBPM } from './Controls/Metronome';
 import SquareLooperRenderer from './SquareLooperRenderer';
 import Section from './Layout/Section';
 import PianoKeyboard from './Layout/PianoKeyboard';
@@ -33,12 +33,12 @@ const App: React.FC = () => {
         <Looper playType={PlayTypes.even} source={() => midiDrums.current && midiDrums.current.playDrumsNow([16])} render={SquareLooperRenderer} />
         <Looper playType={PlayTypes.even} bpm={myBPM * 4} source={() => midiDrums.current && midiDrums.current.playDrumsNow([39])} render={SquareLooperRenderer} />
 
-        <Looper playType={PlayTypes.odd} bpm={myBPM * 4} source={() => midiBass.current && midiBass.current.playChordNow(376, [30], 1)} render={SquareLooperRenderer} />
+        <Section title="Bass">
+          <MIDISounds ref={midiBass} appElementName="root" instruments={[376]} />
+          <Looper playType={PlayTypes.odd} bpm={myBPM * 4} source={() => midiBass.current && midiBass.current.playChordNow(376, [30], 1)} render={SquareLooperRenderer} />
+        </Section>
       </Metronome>
 
-      <Section title="Bass">
-        <MIDISounds ref={midiBass} appElementName="root" instruments={[376]} />
-      </Section>
 
       <Section title="Keys">
         <MIDISounds ref={midiKeys} appElementName="root" instruments={[1,2,3,305, 847]} />
