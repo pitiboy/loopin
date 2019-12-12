@@ -16,6 +16,22 @@ const BeatStyles = styled.div<BeatStylesProps>`
   `}
 `;
 
+
+export interface PlayBeatProps {
+  playBeat?: number[];
+}
+
+export interface LooperRendererProps extends PlayBeatProps{
+  playBeat?: number[];
+  step: number;
+}
+
+const DefaultLooperRenderer = ({ playBeat, step }: LooperRendererProps) => (
+  <RythmStyles>
+    {(playBeat && playBeat.map((beat, index) => <BeatStyles active={index === step} key={index}>{beat}</BeatStyles>)) || null}
+  </RythmStyles>
+);
+
 export enum PlayTypes {
   all = "all",
   odd = "odd",
@@ -24,19 +40,40 @@ export enum PlayTypes {
   last = "last",
 }
 
-export interface GetPlayBeatProps {
+
+
+export interface BasicLooperProps {
   playType?: PlayTypes,
-  playBeat?: number[],
-  bpm?: number;
-  metronomeBpm?: number;
+  rythmLength?: number; // needs to be injected
 }
 
-export interface LooperProps extends GetPlayBeatProps {
+export interface GetPlayBeatProps extends BasicLooperProps {
+  multiplier: number; // needs to be injected
+}
+
+export interface LooperProps extends BasicLooperProps, PlayBeatProps {
   bpm?: number;
   looping?: boolean;
   source?: () => void;
-  rythmLength?: number; // needs to be injected
   step?: number; // needs to be injected
+  metronomeBpm?: number;
+}
+
+const generatePlayBeat = ({ playType, rythmLength, multiplier }: GetPlayBeatProps) => {
+  const length = (rythmLength || 0) * multiplier;
+  switch (playType) {
+  case PlayTypes.odd:
+    return new Array(length).fill(0).map((_qwe, index) => 1 - (index % 2));
+  case PlayTypes.even:
+    return new Array(length).fill(0).map((_qwe, index) => index % 2);
+  case PlayTypes.first:
+    return new Array(length).fill(0).map((_qwe, index) => index === 0);
+  case PlayTypes.last:
+    return new Array(length).fill(0).map((_qwe, index) => index === 0);
+  case PlayTypes.all:
+  default:
+    return new Array(length).fill(1);
+  }
 }
 
 export default ({
@@ -52,25 +89,7 @@ export default ({
   const multiplier = (bpm && metronomeBpm && bpm / metronomeBpm) || 1;
   const getStep = (step || 0) * multiplier;
 
-  // TODO: refactor & test
-  const generatePlayBeat = ({ playBeat, playType, bpm, metronomeBpm }: GetPlayBeatProps) => {
-    if (playBeat) return playBeat;
-    const length = (rythmLength || 0) * multiplier;
-    switch (playType) {
-    case PlayTypes.odd:
-      return new Array(length).fill(0).map((_qwe, index) => 1 - (index % 2));
-    case PlayTypes.even:
-      return new Array(length).fill(0).map((_qwe, index) => index % 2);
-    case PlayTypes.first:
-      return new Array(length).fill(0).map((_qwe, index) => index === 0);
-    case PlayTypes.last:
-      return new Array(length).fill(0).map((_qwe, index) => index === 0);
-    case PlayTypes.all:
-    default:
-      return new Array(length).fill(1);
-    }
-  }
-  const getPlayBeat = generatePlayBeat({ playBeat, playType, bpm, metronomeBpm });
+  const getPlayBeat = playBeat || generatePlayBeat({ playType, rythmLength, multiplier });
 
   const playSource = () => {
     if(getPlayBeat[getStep] && source) {
@@ -86,8 +105,6 @@ export default ({
   }, [step, looping]);
 
   return (
-    <RythmStyles>
-      {getPlayBeat.map((beat, index) => <BeatStyles active={index === getStep} key={index}>{beat}</BeatStyles>)}
-    </RythmStyles>
+    <DefaultLooperRenderer playBeat={getPlayBeat} step={getStep} />
   );
 };
