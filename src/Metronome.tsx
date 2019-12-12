@@ -5,7 +5,7 @@ export interface LooperProps {
   looping?: boolean;
   source?: () => void;
   rythmLength?: number;
-  rythmDevider?: number;
+  rythmDivider?: number;
   children: JSX.Element | JSX.Element[];
 }
 
@@ -17,7 +17,7 @@ export default ({
   bpm = defaultBPM,
   looping = true,
   rythmLength = defaultRrythmLength,
-  rythmDevider = 8,
+  rythmDivider = defaultRrythmLength * 2,
   children,
 }: LooperProps) => {
   const [start, setStart] = useState(new Date());
@@ -42,8 +42,8 @@ export default ({
       init();
       // TODO: refactor metronome to global
       if (metronome) clearTimeout(metronome);
-      // console.log('interval / rythmDevider', interval / rythmDevider);
-      setMetronome(setInterval(() => calculateStep(), interval / rythmDevider));
+      // console.log('interval / rythmDivider', interval / rythmDivider);
+      setMetronome(setInterval(() => calculateStep(), interval / rythmDivider));
     }
   }, [interval, looping]);
 

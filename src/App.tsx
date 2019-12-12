@@ -20,7 +20,8 @@ const App: React.FC = () => {
     <div className="App">
       <button onClick={() => playPiano()}>Play</button>
       <Metronome bpm={myBPM}>
-        <Looper playType={PlayTypes.odd} source={() => drum2.current && drum2.current.playDrumsNow([1])} render={SquareLooperRenderer} />
+        <Looper playType={PlayTypes.oddQuarter} bpm={myBPM * 2} source={() => drum2.current && drum2.current.playDrumsNow([1])} render={SquareLooperRenderer} />
+        <Looper playBeat={[0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1]} bpm={myBPM * 2} source={() => drum2.current && drum2.current.playDrumsNow([1])} render={SquareLooperRenderer} />
         <Looper playType={PlayTypes.even} source={() => drum.current && drum.current.playDrumsNow([16])} render={SquareLooperRenderer} />
         <Looper playType={PlayTypes.even} bpm={myBPM * 4} source={() => drum.current && drum.current.playDrumsNow([39])} render={SquareLooperRenderer} />
       </Metronome>

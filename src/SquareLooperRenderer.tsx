@@ -40,7 +40,7 @@ export default ({ playBeat, step, setPlayBeat }: LooperRendererProps) => {
   };
   return (
     <RythmStyles>
-      {(playBeat && playBeat.map((beat, index) => <BeatStyles active={index === step} enabled={beat > 0} key={index} onClick={() => updateBeat(index)} />)) || null}
+      {(playBeat && playBeat.map((beat, index) => <BeatStyles active={index === step} enabled={beat > 0} key={index} onClick={() => updateBeat(index)}>{beat}</BeatStyles>)) || null}
     </RythmStyles>
   );
 }

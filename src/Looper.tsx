@@ -17,6 +17,8 @@ export enum PlayTypes {
   all = "all",
   odd = "odd",
   even = "even",
+  oddQuarter = "quarter",
+  evenQuarter = "evenQuarter",
   first = "first",
   last = "last",
 }
@@ -42,6 +44,7 @@ export interface LooperProps extends BasicLooperProps {
 }
 
 
+// TODO: test
 const generatePlayBeat = ({ playType, rythmLength, multiplier }: GeneratePlayBeatProps) => {
   const length = (rythmLength || 0) * multiplier;
   switch (playType) {
@@ -49,6 +52,10 @@ const generatePlayBeat = ({ playType, rythmLength, multiplier }: GeneratePlayBea
     return new Array(length).fill(0).map((_qwe, index) => 1 - (index % 2));
   case PlayTypes.even:
     return new Array(length).fill(0).map((_qwe, index) => index % 2);
+  case PlayTypes.oddQuarter:
+    return new Array(length).fill(0).map((_qwe, index) => index % 4 ? 0 : 1);
+  case PlayTypes.evenQuarter:
+    return new Array(length).fill(0).map((_qwe, index) => index % 4 === 2 ? 1 : 0);
   case PlayTypes.first:
     return new Array(length).fill(0).map((_qwe, index) => index === 0);
   case PlayTypes.last:
@@ -58,6 +65,7 @@ const generatePlayBeat = ({ playType, rythmLength, multiplier }: GeneratePlayBea
     return new Array(length).fill(1);
   }
 }
+
 
 export default ({
   bpm,
