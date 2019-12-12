@@ -12,7 +12,7 @@ https://www.npmjs.com/package/react-mic
 <!-- https://libraries.io/npm/audio-loader -->
 
 
-### todo
+### todo
 track control
   <!-- control view with render props -->
   select the sound
@@ -34,4 +34,4 @@ general control panel
     first track (or line) could be the animated timer track for metronome
     bpm speed adjustment
     display counter
-save & load music
+save & load music
