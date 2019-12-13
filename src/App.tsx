@@ -7,6 +7,7 @@ import Metronome, { defaultBPM } from './Controls/Metronome';
 import SquareLooperRenderer from './SquareLooperRenderer';
 import Section from './Layout/Section';
 import PianoKeyboard from './Layout/PianoKeyboard';
+import RootControls from './Controls/RootControls';
 
 
 const App: React.FC = () => {
@@ -15,6 +16,7 @@ const App: React.FC = () => {
   const midiKeys = useRef<MIDISoundsType>(null);
   const [bassChord, setBassChord] = useState(376); // good bass: 372, 376
   const [pianoChord, setPianoChord] = useState(847);
+  const [myBPM, setMyBPM] = useState(80);
 
   // TODO: strings Keys, , Strings
   const playChord = (pitches: number | number[]) => {
@@ -33,9 +35,10 @@ const App: React.FC = () => {
     }
     setPianoChord(instrument);
   }
-  const myBPM = 80;
   return (
     <div className="App">
+      set BPM: <input type="number" value={myBPM} onChange={e => setMyBPM(parseInt(e.target.value, 10))} min={30} max={300} />
+      <RootControls />
       <Metronome bpm={myBPM}>
         <Section title="Drums">
           <MIDISounds ref={midiDrums} appElementName="root" drums={[1, 16, 39]} />

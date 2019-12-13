@@ -14,10 +14,12 @@ https://codeburst.io/hello-create-react-app-cra-typescript-8e04f7012939
 ### todo
 track control
   <!-- control view with render props -->
-  select the sound
+  control button
+    select the sound
+    mute a track
+    record a rythm
   choose from preselected rythms
-  mute a track
-  indicate name for related MIDI SOUNDS svg
+  <!-- indicate name for related MIDI SOUNDS svg -->
   add simple [cta] to the end of the track
 record
   mic
@@ -37,9 +39,12 @@ make tracks in grid
     <!-- https://github.com/kevinsqi/react-piano -->
     <!-- https://github.com/lillydinhle/react-piano-component -->
 general control panel
+  mobx
   metronome
     provider step as Context, and useContext in Looper
     first track (or line) could be the animated timer track for metronome
     bpm speed adjustment
+      https://www.npmjs.com/package/react-compound-slider
+      <!-- https://github.com/NerdWallet/nw-react-slider -->
     display counter
 save & load music
