@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import DefaultLooperRenderer from './DefaultLooperRenderer';
+import { LooperControls, LooperControlStyles, ControlButton } from './LooperControls';
+import { LooperStyles } from './LooperStyles';
 
 export interface BeatStylesProps {
   active: boolean;
@@ -10,7 +12,7 @@ export interface BeatStylesProps {
 export interface LooperRendererProps {
   playBeat: number[];
   step: number;
-  setPlayBeat?: (playBeat: number[]) => void;
+  setPlayBeat?: (playBeat: number[]) => void;
 }
 
 export enum PlayTypes {
@@ -46,7 +48,7 @@ export interface LooperProps extends BasicLooperProps {
 
 // TODO: test
 const generatePlayBeat = ({ playType, rythmLength, multiplier }: GeneratePlayBeatProps) => {
-  const length = (rythmLength || 0) * multiplier;
+  const length = (rythmLength || 0) * multiplier;
   switch (playType) {
   case PlayTypes.odd:
     return new Array(length).fill(0).map((_qwe, index) => 1 - (index % 2));
@@ -78,16 +80,18 @@ export default ({
   step,
   render: renderProp,
 }: LooperProps) => {
-  const multiplier = (bpm && metronomeBpm && bpm / metronomeBpm) || 1;
+  const multiplier = (bpm && metronomeBpm && bpm / metronomeBpm) || 1;
   const getStep = (step || 0) * multiplier;
-  const LooperRenderer = renderProp || DefaultLooperRenderer;
+  const LooperRenderer = renderProp || DefaultLooperRenderer;
   const [playBeat, setPlayBeat] = useState(originalPlayBeat|| generatePlayBeat({ playType, rythmLength, multiplier }));
+  const [muted, setMuted] = useState(false);
 
   const playSource = () => {
-    if(playBeat[getStep] && source) {
+    if(playBeat[getStep] && source && !muted) {
       source();
     }
   }
+
 
   useEffect(() => {
     if (looping) {
@@ -96,6 +100,9 @@ export default ({
   }, [step, looping]);
 
   return (
-    <LooperRenderer playBeat={playBeat} step={getStep} setPlayBeat={(playBeat) => setPlayBeat(playBeat)} />
+    <LooperStyles>
+      <LooperControls muted={muted} setMuted={setMuted} />
+      <LooperRenderer playBeat={playBeat} step={getStep} setPlayBeat={(playBeat) => setPlayBeat(playBeat)} />
+    </LooperStyles>
   );
 };

@@ -10,6 +10,7 @@
     "@types/styled-components": "^4.4.0"
   },
   "dependencies": {
+    "mic-recorder": "^4.9.0",
     "midi-sounds-react": "^1.2.54",
     "mobx": "^5.15.0",
     "mobx-react": "^6.1.4",

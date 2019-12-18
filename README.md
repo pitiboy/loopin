@@ -14,8 +14,8 @@ https://codeburst.io/hello-create-react-app-cra-typescript-8e04f7012939
 ### todo
 track control
   <!-- control view with render props -->
-  control button
-    select the sound
+  control buttons
+    select the MIDI sound
     mute a track
     record a rythm
   choose from preselected rythms
@@ -42,6 +42,7 @@ make tracks in grid
     <!-- https://github.com/kevinsqi/react-piano -->
     <!-- https://github.com/lillydinhle/react-piano-component -->
 general control panel
+  https://reactgo.com/material-ui-react-tutorial/
   mobx
   metronome
     provider step as Context, and useContext in Looper
