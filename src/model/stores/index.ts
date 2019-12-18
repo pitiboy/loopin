@@ -4,7 +4,7 @@ import TrackStore from './TrackStore';
 
 const trackStore = new TrackStore();
 const stores = {
-  fav: trackStore,
+  trx: trackStore,
 };
 
 // Use the React context API so that the stores are available anywhere in the app

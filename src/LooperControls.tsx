@@ -16,7 +16,7 @@ export const ControlButton = styled.button<ControlButtonProps>`
 `;
 
 
-export const LooperControls = ({ muted, setMuted}: { muted: boolean, setMuted: (a: boolean ) => void}) => (
+export const LooperControls = ({ muted, setMuted, name}: { muted: boolean, setMuted: (a: boolean ) => void, name?: string}) => (
   <LooperControlStyles>
     <ControlButton onClick={() => setMuted(!muted)} active={muted}>Mute</ControlButton>
   </LooperControlStyles>

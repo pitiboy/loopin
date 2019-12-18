@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import DefaultLooperRenderer from './DefaultLooperRenderer';
-import { LooperControls, LooperControlStyles, ControlButton } from './LooperControls';
+import { LooperControls } from './LooperControls';
 import { LooperStyles } from './LooperStyles';
+import { PlayBeatType, PlayTypes } from './model/types';
 
 export interface BeatStylesProps {
   active: boolean;
@@ -10,20 +11,11 @@ export interface BeatStylesProps {
 
 
 export interface LooperRendererProps {
-  playBeat: number[];
+  playBeat: PlayBeatType;
   step: number;
-  setPlayBeat?: (playBeat: number[]) => void;
+  setPlayBeat?: (playBeat: PlayBeatType) => void;
 }
 
-export enum PlayTypes {
-  all = "all",
-  odd = "odd",
-  even = "even",
-  oddQuarter = "quarter",
-  evenQuarter = "evenQuarter",
-  first = "first",
-  last = "last",
-}
 
 
 export interface BasicLooperProps {
@@ -42,7 +34,8 @@ export interface LooperProps extends BasicLooperProps {
   step?: number; // needs to be injected
   metronomeBpm?: number;
   render?: (props: LooperRendererProps) => JSX.Element;
-  playBeat?: number[];
+  playBeat?: PlayBeatType;
+  name?: string;
 }
 
 
@@ -79,6 +72,7 @@ export default ({
   source,
   step,
   render: renderProp,
+  name,
 }: LooperProps) => {
   const multiplier = (bpm && metronomeBpm && bpm / metronomeBpm) || 1;
   const getStep = (step || 0) * multiplier;
@@ -101,6 +95,7 @@ export default ({
 
   return (
     <LooperStyles>
+      n: {name}
       <LooperControls muted={muted} setMuted={setMuted} />
       <LooperRenderer playBeat={playBeat} step={getStep} setPlayBeat={(playBeat) => setPlayBeat(playBeat)} />
     </LooperStyles>

@@ -1,13 +1,15 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useContext } from 'react';
 import MIDISounds from 'midi-sounds-react';
 // import Looper from 'react-looper';
-import Looper, { PlayTypes } from './Looper';
+import Looper from './Looper';
 import './App.css';
 import Metronome, { defaultBPM } from './Controls/Metronome';
 import SquareLooperRenderer from './SquareLooperRenderer';
 import Section from './Layout/Section';
 import PianoKeyboard from './Layout/PianoKeyboard';
 import RootControls from './Controls/RootControls';
+import { PlayTypes } from './model/types';
+import StoreContext from './model/stores';
 
 
 const App: React.FC = () => {
@@ -17,6 +19,7 @@ const App: React.FC = () => {
   const [bassChord, setBassChord] = useState(376); // good bass: 372, 376
   const [pianoChord, setPianoChord] = useState(847);
   const [myBPM, setMyBPM] = useState(80);
+  const { trx } = useContext(StoreContext);
 
   // TODO: strings Keys, , Strings
   const playChord = (pitches: number | number[]) => {
@@ -43,6 +46,7 @@ const App: React.FC = () => {
         <Section title="Drums">
           <MIDISounds ref={midiDrums} appElementName="root" drums={[1, 16, 39]} />
         </Section>
+        <>{trx.drums.map(drum => <Looper {...drum} key={drum.name} bpm={myBPM * drum.divider} source={() => midiDrums.current && midiDrums.current.playDrumsNow(drum.sound)} render={SquareLooperRenderer} />)}</>
         <Looper playType={PlayTypes.oddQuarter} bpm={myBPM * 2} source={() => midiDrums.current && midiDrums.current.playDrumsNow([1])} render={SquareLooperRenderer} />
         <Looper playBeat={[0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1]} bpm={myBPM * 2} source={() => midiDrums.current && midiDrums.current.playDrumsNow([1])} render={SquareLooperRenderer} />
         <Looper playType={PlayTypes.even} source={() => midiDrums.current && midiDrums.current.playDrumsNow([16])} render={SquareLooperRenderer} />
