@@ -12,12 +12,14 @@ https://codeburst.io/hello-create-react-app-cra-typescript-8e04f7012939
 
 
 ### todo
+mobx
+  implement store
 track control
   <!-- control view with render props -->
   control buttons
-    select the MIDI sound
-    mute a track
-    record a rythm
+    select the MIDI sound [mobx]
+    mute a track [mobx]
+    record a rythm [mobx]?
   choose from preselected rythms
   <!-- indicate name for related MIDI SOUNDS svg -->
   add simple [cta] to the end of the track
@@ -45,9 +47,10 @@ general control panel
   https://reactgo.com/material-ui-react-tutorial/
   mobx
   metronome
-    provider step as Context, and useContext in Looper
+    step => [mobx]
+    provider step as Context, and useContext in Looper?
     first track (or line) could be the animated timer track for metronome
-    bpm speed adjustment
+    bpm speed adjustment[mobx]
       https://www.npmjs.com/package/react-compound-slider
       <!-- https://github.com/NerdWallet/nw-react-slider -->
     display counter
