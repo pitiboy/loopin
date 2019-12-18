@@ -24,6 +24,9 @@ track control
 record
   mic
     https://www.npmjs.com/package/react-mic
+    https://github.com/paraself/mic-recorder
+    <!-- https://github.com/leon3s/node-mic-record -->
+    <!-- https://www.npmjs.com/package/mic -->
   aux
 make tracks in grid
   different type of instruments
