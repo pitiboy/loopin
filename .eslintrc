@@ -17,6 +17,8 @@
     "react/destructuring-assignment": "off",
     "import/prefer-default-export": "off",
     "import/extensions": "off",
+    "react/jsx-props-no-spreading": "off",
+    "arrow-parens": "off",
     "react/react-in-jsx-scope": "off",
     "react/jsx-one-expression-per-line": "off",
     "max-len": "off",
@@ -27,6 +29,7 @@
     "no-useless-constructor": "off",
     "no-empty-function": "off",
     "prefer-destructuring": "off",
+    "no-underscore-dangle": "off"
   },
   "globals": {
     "window": true,

@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { LooperControlStyles } from './LooperControls';
 
-export const LooperStyles = styled.div`
+const LooperStyles = styled.div`
   display: flex;
 
   * {
@@ -12,3 +12,12 @@ export const LooperStyles = styled.div`
     flex: 0 0 auto;
   }
 `;
+
+export const Name = styled.b`
+  flex: 0 1 auto;
+  width: 100px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+`;
+
+export default LooperStyles;

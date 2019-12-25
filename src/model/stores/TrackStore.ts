@@ -1,17 +1,7 @@
 import {
   computed, observable, action,
 } from 'mobx';
-import { PlayTypes, PlayBeatType } from '../types';
-
-enum TrackType {
-  drum = 10,
-  bass = 20,
-  string = 30,
-  key = 90,
-  // brass
-  // pad
-  recorded = 199,
-}
+import { PlayTypes, PlayBeatType, TrackType } from '../types';
 
 interface TackControlProps {
   // TODO

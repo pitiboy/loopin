@@ -10,13 +10,13 @@ export interface ControlButtonProps {
 }
 
 export const ControlButton = styled.button<ControlButtonProps>`
-  ${props => props.active && `
+  ${props => props.active && `
     background-color: green;
   `}
 `;
 
 
-export const LooperControls = ({ muted, setMuted, name}: { muted: boolean, setMuted: (a: boolean ) => void, name?: string}) => (
+export const LooperControls = ({ muted, setMuted, name }: { muted: boolean; setMuted: (a: boolean) => void; name?: string}) => (
   <LooperControlStyles>
     <ControlButton onClick={() => setMuted(!muted)} active={muted}>Mute</ControlButton>
   </LooperControlStyles>

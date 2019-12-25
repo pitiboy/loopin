@@ -28,19 +28,19 @@ const App: React.FC = () => {
       const playPitches = defaultPitches.concat(pitches);
       midiKeys.current.playChordNow(pianoChord, playPitches, 0.5);
     }
-  }
+  };
 
-  const cacheInstrument = (instrument: number) => {
+  const cacheInstrument = (instrument: number) => {
     console.log('trying to cache instrument', instrument);
     if (midiKeys.current) {
       midiKeys.current.cacheInstrument(instrument);
-      midiKeys.current.player.loader.waitLoad(() => playChord(50));
+      midiKeys.current.player.loader.waitLoad(() => playChord(50));
     }
     setPianoChord(instrument);
-  }
+  };
   return (
     <div className="App">
-      set BPM: <input type="number" value={myBPM} onChange={e => setMyBPM(parseInt(e.target.value, 10))} min={30} max={300} />
+      set BPM: <input type="number" value={myBPM} onChange={e => setMyBPM(parseInt(e.target.value, 10))} min={30} max={300} />
       <RootControls />
       <Metronome bpm={myBPM}>
         <Section title="Drums">
@@ -54,20 +54,20 @@ const App: React.FC = () => {
 
         <Section title="Bass">
           <MIDISounds ref={midiBass} appElementName="root" instruments={[bassChord]} />
-           <input type="number" value={bassChord} onChange={e => setBassChord(parseInt(e.target.value, 10))} min={366} max={446} />
+          <input type="number" value={bassChord} onChange={e => setBassChord(parseInt(e.target.value, 10))} min={366} max={446} />
         </Section>
         <Looper playType={PlayTypes.odd} bpm={myBPM * 4} source={() => midiBass.current && midiBass.current.playChordNow(bassChord, [30], 1)} render={SquareLooperRenderer} />
       </Metronome>
 
 
       <Section title="Keys">
-        <MIDISounds ref={midiKeys} appElementName="root" instruments={[1,2,3,305, 847]} />
-        <input type="number" value={pianoChord} onChange={e => cacheInstrument(parseInt(e.target.value, 10))}  min={0} max={1393} />
+        <MIDISounds ref={midiKeys} appElementName="root" instruments={[1, 2, 3, 305, 847]} />
+        <input type="number" value={pianoChord} onChange={e => cacheInstrument(parseInt(e.target.value, 10))} min={0} max={1393} />
       </Section>
 
       <PianoKeyboard playNote={(note) => playChord(note)} />
     </div>
   );
-}
+};
 
 export default App;

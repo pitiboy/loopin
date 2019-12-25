@@ -9,3 +9,17 @@ export enum PlayTypes {
   first = 'first',
   last = 'last',
 }
+
+
+export enum TrackType {
+  // instruments
+  drum = 110,
+  bass = 120,
+  string = 130,
+  key = 190,
+  // brass
+  // pad
+
+  recording = 101,
+  other = 900,
+}
