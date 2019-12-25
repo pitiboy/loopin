@@ -3,12 +3,11 @@ import MIDISounds from 'midi-sounds-react';
 // import Looper from 'react-looper';
 import Looper from './Looper';
 import './App.css';
-import Metronome, { defaultBPM } from './Controls/Metronome';
+import Metronome from './Controls/Metronome';
 import SquareLooperRenderer from './SquareLooperRenderer';
 import Section from './Layout/Section';
 import PianoKeyboard from './Layout/PianoKeyboard';
 import RootControls from './Controls/RootControls';
-import { PlayTypes } from './model/types';
 import StoreContext from './model/stores';
 
 
@@ -44,19 +43,15 @@ const App: React.FC = () => {
       <RootControls />
       <Metronome bpm={myBPM}>
         <Section title="Drums">
-          <MIDISounds ref={midiDrums} appElementName="root" drums={[1, 16, 39]} />
+          <MIDISounds ref={midiDrums} appElementName="root" drums={trx.drumInstrumentIds} />
         </Section>
-        <>{trx.drums.map(drum => <Looper {...drum} key={drum.name} bpm={myBPM * drum.divider} source={() => midiDrums.current && midiDrums.current.playDrumsNow(drum.sound)} render={SquareLooperRenderer} />)}</>
-        <Looper playType={PlayTypes.oddQuarter} bpm={myBPM * 2} source={() => midiDrums.current && midiDrums.current.playDrumsNow([1])} render={SquareLooperRenderer} />
-        <Looper playBeat={[0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1]} bpm={myBPM * 2} source={() => midiDrums.current && midiDrums.current.playDrumsNow([1])} render={SquareLooperRenderer} />
-        <Looper playType={PlayTypes.even} source={() => midiDrums.current && midiDrums.current.playDrumsNow([16])} render={SquareLooperRenderer} />
-        <Looper playType={PlayTypes.even} bpm={myBPM * 4} source={() => midiDrums.current && midiDrums.current.playDrumsNow([39])} render={SquareLooperRenderer} />
+        {trx.drums.map(drum => <Looper {...drum} key={drum.name} bpm={myBPM * drum.divider} source={() => midiDrums.current && midiDrums.current.playDrumsNow(drum.sound)} render={SquareLooperRenderer} />)}
 
         <Section title="Bass">
-          <MIDISounds ref={midiBass} appElementName="root" instruments={[bassChord]} />
+          <MIDISounds ref={midiBass} appElementName="root" instruments={trx.bassersInstrumentIds} />
           <input type="number" value={bassChord} onChange={e => setBassChord(parseInt(e.target.value, 10))} min={366} max={446} />
         </Section>
-        <Looper playType={PlayTypes.odd} bpm={myBPM * 4} source={() => midiBass.current && midiBass.current.playChordNow(bassChord, [30], 1)} render={SquareLooperRenderer} />
+        {trx.bassers.map(chord => <Looper {...chord} key={chord.name} bpm={myBPM * chord.divider} source={() => midiDrums.current && midiDrums.current.playChordNow(chord.sound, chord.pitches || [30], chord.duration || 1)} render={SquareLooperRenderer} />)}
       </Metronome>
 
 

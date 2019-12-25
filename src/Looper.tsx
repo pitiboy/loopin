@@ -76,7 +76,7 @@ export default ({
   const multiplier = (bpm && metronomeBpm && bpm / metronomeBpm) || 1;
   const getStep = (step || 0) * multiplier;
   const LooperRenderer = renderProp || DefaultLooperRenderer;
-  const [playBeat, setPlayBeat] = useState(originalPlayBeat|| generatePlayBeat({ playType, rythmLength, multiplier }));
+  const [playBeat, setPlayBeat] = useState((originalPlayBeat && originalPlayBeat.slice())|| generatePlayBeat({ playType, rythmLength, multiplier }));
   const [muted, setMuted] = useState(false);
 
   const playSource = () => {

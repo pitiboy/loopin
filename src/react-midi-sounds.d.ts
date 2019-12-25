@@ -6,7 +6,7 @@ interface MIDISoundsType {
   cacheInstrument: (instrument: number) => void;
   player: {
     loader: {
-      waitLoad: (func: () => void) => void;
-    }
-  }
+      waitLoad: (func: () => void) => void;
+    };
+  };
 }

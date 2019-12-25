@@ -6,7 +6,7 @@ export interface LooperProps {
   source?: () => void;
   rythmLength?: number;
   rythmDivider?: number;
-  children: JSX.Element | JSX.Element[];
+  children: JSX.Element | JSX.Element[] | any; // TODO: resolve not to use any for mapped Looper items
 }
 
 const defaultRrythmLength = 8;
@@ -55,6 +55,7 @@ export default ({
 
   return (
     <>
+      <h1>{step}</h1>
       {newChildren}
     </>
   );
