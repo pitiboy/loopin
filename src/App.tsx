@@ -15,7 +15,6 @@ const App: React.FC = () => {
   const midiDrums = useRef<MIDISoundsType>(null);
   const midiBass = useRef<MIDISoundsType>(null);
   const midiKeys = useRef<MIDISoundsType>(null);
-  const [bassChord, setBassChord] = useState(376); // good bass: 372, 376
   const [pianoChord, setPianoChord] = useState(847);
   const [myBPM, setMyBPM] = useState(80);
   const { trx } = useContext(StoreContext);
