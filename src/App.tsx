@@ -49,9 +49,9 @@ const App: React.FC = () => {
 
         <Section title="Bass">
           <MIDISounds ref={midiBass} appElementName="root" instruments={trx.bassersInstrumentIds} />
-          <input type="number" value={bassChord} onChange={e => setBassChord(parseInt(e.target.value, 10))} min={366} max={446} />
+          {/* <input type="number" value={bassChord} onChange={e => setBassChord(parseInt(e.target.value, 10))} min={366} max={446} /> */}
         </Section>
-        {trx.bassers.map(chord => <Looper {...chord} key={chord.name} bpm={myBPM * chord.divider} source={() => midiDrums.current && midiDrums.current.playChordNow(chord.sound, chord.pitches || [30], chord.duration || 1)} render={SquareLooperRenderer} />)}
+        {trx.bassers.map(chord => <Looper {...chord} key={chord.name} bpm={myBPM * chord.divider} source={({ pitches }) => midiDrums.current && midiDrums.current.playChordNow(chord.sound, chord.pitches || pitches || [30], chord.duration || 1)} render={SquareLooperRenderer} />)}
       </Metronome>
 
 

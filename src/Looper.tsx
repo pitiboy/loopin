@@ -3,6 +3,7 @@ import DefaultLooperRenderer from './DefaultLooperRenderer';
 import { LooperControls } from './LooperControls';
 import LooperStyles, { Name } from './LooperStyles';
 import { PlayBeatType, PlayTypes } from './model/types';
+import { PitchedSound } from './model/stores/TrackStore';
 
 export interface BeatStylesProps {
   active: boolean;
@@ -29,17 +30,18 @@ export interface GeneratePlayBeatProps extends BasicLooperProps {
 export interface LooperProps extends BasicLooperProps {
   bpm?: number;
   looping?: boolean;
-  source?: () => void;
+  source?: (arg0: PitchedSound) => void;
   step?: number; // needs to be injected
   metronomeBpm?: number;
   render?: (props: LooperRendererProps) => JSX.Element;
   playBeat?: PlayBeatType;
+  duration?: number;
   name?: string;
 }
 
 
 // TODO: test
-const generatePlayBeat = ({ playType, rythmLength, multiplier }: GeneratePlayBeatProps) => {
+const generatePlayBeat = ({ playType, rythmLength, multiplier }: GeneratePlayBeatProps): number[] => {
   const length = (rythmLength || 0) * multiplier;
   switch (playType) {
   case PlayTypes.odd:
@@ -51,9 +53,9 @@ const generatePlayBeat = ({ playType, rythmLength, multiplier }: GeneratePlayBea
   case PlayTypes.evenQuarter:
     return new Array(length).fill(0).map((_qwe, index) => (index % 4 === 2 ? 1 : 0));
   case PlayTypes.first:
-    return new Array(length).fill(0).map((_qwe, index) => index === 0);
+    return new Array(length).fill(0).map((_qwe, index) => (index === 0 ? 1 : 0));
   case PlayTypes.last:
-    return new Array(length).fill(0).map((_qwe, index) => index === 0);
+    return new Array(length).fill(0).map((_qwe, index) => (index === length - 1 ? 1 : 0));
   case PlayTypes.all:
   default:
     return new Array(length).fill(1);
@@ -72,6 +74,7 @@ export default ({
   step,
   render: renderProp,
   name,
+  duration,
 }: LooperProps) => {
   const multiplier = (bpm && metronomeBpm && bpm / metronomeBpm) || 1;
   const getStep = (step || 0) * multiplier;
@@ -81,7 +84,7 @@ export default ({
 
   const playSource = () => {
     if (playBeat[getStep] && source && !muted) {
-      source();
+      source({ pitches: [playBeat[getStep]], duration });
     }
   };
 

@@ -8,12 +8,15 @@ interface TackControlProps {
   muted?: boolean;
 }
 
-interface TrackSoundProps {
+export interface PitchedSound {
+  pitches?: number[];
+  duration?: number;
+}
+
+interface TrackSoundProps extends PitchedSound {
   name: string;
   type: TrackType;
   sound: any;
-  pitches?: number[];
-  duration?: number;
   // TODO
   divider: number;
   playType?: PlayTypes;
@@ -63,14 +66,27 @@ export default class TrackStore {
     divider: 4,
     playType: PlayTypes.even,
   },
+  // {
+  //   name: 'korgbass',
+  //   type: TrackType.bass,
+  //   sound: 376,
+  //   pitches: [30],
+  //   duration: 1,
+  //   divider: 4,
+  //   playType: PlayTypes.odd,
+  // },
   {
-    name: 'korgbass',
+    name: 'korgbass 2',
     type: TrackType.bass,
-    sound: 376,
-    pitches: [30],
+    sound: 371,
     duration: 1,
     divider: 4,
-    playType: PlayTypes.odd,
+    playBeat: [
+      0, 30, 0, 32, 32, 0, 30, 0,
+      0, 30, 0, 0, 32, 0, 30, 0,
+      0, 30, 0, 32, 36, 0, 30, 0,
+      0, 30, 0, 0, 30, 30, 0, 0,
+    ],
   },
   ];
 
