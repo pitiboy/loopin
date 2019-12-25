@@ -10,6 +10,7 @@ enum TrackType {
   key = 90,
   // brass
   // pad
+  recorded = 199,
 }
 
 interface TackControlProps {
