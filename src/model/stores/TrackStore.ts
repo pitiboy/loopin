@@ -13,13 +13,17 @@ export interface PitchedSound {
   duration?: number;
 }
 
-interface TrackSoundProps extends PitchedSound {
+export interface SoundConfigProps {
   name: string;
   type: TrackType;
-  sound: any;
-  // TODO
   divider: number;
   playType?: PlayTypes;
+  instrument: number;
+  playSound?: () => void;
+}
+
+interface TrackSoundProps extends SoundConfigProps, PitchedSound {
+  // TODO
   playBeat?: PlayBeatType;
 }
 
@@ -29,7 +33,7 @@ interface TrackProps extends TrackSoundProps, TackControlProps {
 }
 
 const defaultArray: number[] = [];
-const flattenArray = (array: number[]) => array.reduce((stack, sound) => [...stack, sound], defaultArray.slice());
+const flattenArray = (array: (number | number[])[]) => defaultArray.slice().concat.apply([], array);
 
 
 // https://stackoverflow.com/questions/52641907/how-to-get-mobx-decorators-to-work-with-create-react-app-v2
@@ -41,35 +45,35 @@ export default class TrackStore {
   @observable tracks: TrackProps[] = [{
     name: 'kickdrum',
     type: TrackType.drum,
-    sound: [1],
+    instrument: 1,
     divider: 2,
     playType: PlayTypes.oddQuarter,
   },
   {
     name: 'kickdrum variety',
     type: TrackType.drum,
-    sound: [1],
+    instrument: 1,
     divider: 2,
     playBeat: [0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1],
   },
   {
     name: 'snaredrum',
     type: TrackType.drum,
-    sound: [16],
+    instrument: 16,
     divider: 1,
     playType: PlayTypes.even,
   },
   {
     name: 'cin',
     type: TrackType.drum,
-    sound: [39],
+    instrument: 39,
     divider: 4,
     playType: PlayTypes.even,
   },
   // {
   //   name: 'korgbass',
   //   type: TrackType.bass,
-  //   sound: 376,
+  //   instrument: 376,
   //   pitches: [30],
   //   duration: 1,
   //   divider: 4,
@@ -78,7 +82,7 @@ export default class TrackStore {
   {
     name: 'korgbass 2',
     type: TrackType.bass,
-    sound: 371,
+    instrument: 371,
     pitches: [30],
     duration: 1,
     divider: 4,
@@ -87,7 +91,7 @@ export default class TrackStore {
   {
     name: 'quitar1',
     type: TrackType.bass,
-    sound: 307,
+    instrument: 307,
     duration: 1,
     divider: 2,
     playBeat: [
@@ -107,7 +111,7 @@ export default class TrackStore {
   }
 
   @computed public get drumInstrumentIds() {
-    return flattenArray(this.drums.map(track => track.sound));
+    return flattenArray(this.drums.map(track => track.instrument));
   }
 
   @computed public get bassers() {
@@ -115,7 +119,7 @@ export default class TrackStore {
   }
 
   @computed public get bassersInstrumentIds() {
-    return flattenArray(this.bassers.map(track => track.sound));
+    return flattenArray(this.bassers.map(track => track.instrument));
   }
 
   @action _remove(track: TrackProps) {
