@@ -1,4 +1,5 @@
 import React, { useRef, useState, useContext } from 'react';
+import { observer } from 'mobx-react';
 import MIDISounds from 'midi-sounds-react';
 // import Looper from 'react-looper';
 import Looper from './Looper';
@@ -13,7 +14,7 @@ import { ControlButton } from './ControlButton';
 import LooperStyles from './LooperStyles';
 
 
-const App: React.FC = () => {
+const App: React.FC = observer(() => {
   const midiDrums = useRef<MIDISoundsType>(null);
   const midiBass = useRef<MIDISoundsType>(null);
   const midiKeys = useRef<MIDISoundsType>(null);
@@ -70,6 +71,6 @@ const App: React.FC = () => {
       <PianoKeyboard playNote={(note) => playChord(note)} />
     </div>
   );
-};
+});
 
 export default App;

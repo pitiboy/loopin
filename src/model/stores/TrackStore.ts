@@ -3,7 +3,8 @@ import {
 } from 'mobx';
 import { PlayTypes, PlayBeatType, TrackType } from '../types';
 
-interface TackControlProps {
+export interface TrackControlProps {
+  name: string;
   // TODO
   muted?: boolean;
 }
@@ -15,11 +16,9 @@ export interface PitchedSound {
 
 export interface MidiSoundCondfigProps {
   instrument: number;
-
 }
 
 export interface SoundConfigProps extends MidiSoundCondfigProps{
-  name: string;
   type: TrackType;
   divider: number;
   playType?: PlayTypes;
@@ -32,7 +31,7 @@ interface TrackSoundProps extends SoundConfigProps, PitchedSound {
 }
 
 
-interface TrackProps extends TrackSoundProps, TackControlProps {
+interface TrackProps extends TrackSoundProps, TrackControlProps {
 
 }
 
@@ -126,14 +125,24 @@ export default class TrackStore {
     return flattenArray(this.bassers.map(track => track.instrument));
   }
 
-  @action _remove(track: TrackProps) {
+  @action _update(track: TrackControlProps) {
+    this.tracks = this.tracks.slice().map(t => (t.name === track.name ? { ...t, ...track }: t));
   }
 
-  @action _add(track: TrackProps) {
+  @action _remove(track: TrackControlProps) {
+    console.log('remove ', track);
+  }
+
+  @action _add(track: TrackControlProps) {
+    console.log('add new ', track);
   }
 
   // bind this
   @action add = this._add.bind(this);
 
   @action remove = this._remove.bind(this);
+
+  @action update = this._update.bind(this);
+
+  @action mute = this._update.bind(this);
 }

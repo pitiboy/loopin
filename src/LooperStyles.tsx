@@ -14,7 +14,7 @@ const LooperStyles = styled.div`
 `;
 
 export const Name = styled.b`
-  flex: 0 1 auto;
+  flex: 0 0 auto;
   width: 100px;
   text-overflow: ellipsis;
   overflow: hidden;

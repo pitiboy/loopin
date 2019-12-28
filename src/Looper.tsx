@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import DefaultLooperRenderer from './DefaultLooperRenderer';
 import { LooperControls } from './LooperControls';
 import LooperStyles, { Name } from './LooperStyles';
 import { PlayBeatType, PlayTypes } from './model/types';
 import { PitchedSound } from './model/stores/TrackStore';
+import StoreContext from './model/stores';
 
 export interface BeatStylesProps {
   active: boolean;
@@ -36,7 +37,8 @@ export interface LooperProps extends BasicLooperProps {
   render?: (props: LooperRendererProps) => JSX.Element;
   playBeat?: PlayBeatType;
   duration?: number;
-  name?: string;
+  name: string;
+  muted?: boolean;
 }
 
 
@@ -75,12 +77,14 @@ export default ({
   render: renderProp,
   name,
   duration,
+  muted,
 }: LooperProps) => {
   const multiplier = (bpm && metronomeBpm && bpm / metronomeBpm) || 1;
   const getStep = (step || 0) * multiplier;
+  const { trx } = useContext(StoreContext);
   const LooperRenderer = renderProp || DefaultLooperRenderer;
   const [playBeat, setPlayBeat] = useState((originalPlayBeat && originalPlayBeat.slice())|| generatePlayBeat({ playType, rythmLength, multiplier }));
-  const [muted, setMuted] = useState(false);
+  const setMuted = () => trx.mute({ name, muted: !muted });
 
   const playSource = () => {
     if (playBeat[getStep] && source && !muted) {
@@ -98,7 +102,7 @@ export default ({
   return (
     <LooperStyles>
       <Name>{name}</Name>
-      <LooperControls muted={muted} setMuted={setMuted} />
+      <LooperControls muted={!!muted} setMuted={setMuted} />
       <LooperRenderer playBeat={playBeat} step={getStep} setPlayBeat={(thisPlayBeat) => setPlayBeat(thisPlayBeat)} />
     </LooperStyles>
   );
