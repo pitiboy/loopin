@@ -111,8 +111,7 @@ export default class TrackStore {
 
   @computed public get drums() {
     return this.tracks
-      .filter(track => track.type === TrackType.drum)
-      .map(track => ({ ...track, muted: true }));
+      .filter(track => track.type === TrackType.drum);
   }
 
   @computed public get drumInstrumentIds() {
@@ -121,8 +120,7 @@ export default class TrackStore {
 
   @computed public get bassers() {
     return this.tracks
-      .filter(track => track.type === TrackType.bass)
-      .map(track => ({ ...track, muted: true }));
+      .filter(track => track.type === TrackType.bass);
   }
 
   @computed public get bassersInstrumentIds() {
@@ -135,7 +133,9 @@ export default class TrackStore {
   }
 
   @action _update(track: TrackControlProps) {
+    console.log('_update', track);
     this.tracks = this.tracks.slice().map(t => (t.name === track.name ? { ...t, ...track }: t));
+    console.log('this.tracks', this.tracks);
   }
 
   @action _remove(track: TrackControlProps) {
