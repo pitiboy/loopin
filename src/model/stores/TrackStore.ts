@@ -13,12 +13,16 @@ export interface PitchedSound {
   duration?: number;
 }
 
-export interface SoundConfigProps {
+export interface MidiSoundCondfigProps {
+  instrument: number;
+
+}
+
+export interface SoundConfigProps extends MidiSoundCondfigProps{
   name: string;
   type: TrackType;
   divider: number;
   playType?: PlayTypes;
-  instrument: number;
   playSound?: () => void;
 }
 

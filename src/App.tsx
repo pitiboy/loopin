@@ -9,6 +9,8 @@ import Section from './Layout/Section';
 import PianoKeyboard from './Layout/PianoKeyboard';
 import RootControls from './Controls/RootControls';
 import StoreContext from './model/stores';
+import { ControlButton } from './ControlButton';
+import LooperStyles from './LooperStyles';
 
 
 const App: React.FC = () => {
@@ -51,6 +53,12 @@ const App: React.FC = () => {
           {/* <input type="number" value={bassChord} onChange={e => setBassChord(parseInt(e.target.value, 10))} min={366} max={446} /> */}
         </Section>
         {trx.bassers.map(chord => <Looper {...chord} key={chord.name} bpm={myBPM * chord.divider} source={({ pitches, duration }) => midiDrums.current && midiDrums.current.playChordNow(chord.instrument, chord.pitches || pitches || [30], duration || 1)} render={SquareLooperRenderer} />)}
+
+        <Section title="Voice">
+          <LooperStyles>
+            <ControlButton onClick={() => console.log('clicked')}>Record</ControlButton>
+          </LooperStyles>
+        </Section>
       </Metronome>
 
 
