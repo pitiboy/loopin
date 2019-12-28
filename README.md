@@ -56,4 +56,5 @@ general control panel
       https://www.npmjs.com/package/react-compound-slider
       <!-- https://github.com/NerdWallet/nw-react-slider -->
     display counter
+  https://jonbellah.com/articles/xstate-react-hooks/
 save & load music
