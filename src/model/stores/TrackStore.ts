@@ -110,7 +110,9 @@ export default class TrackStore {
   ];
 
   @computed public get drums() {
-    return this.tracks.filter(track => track.type === TrackType.drum);
+    return this.tracks
+      .filter(track => track.type === TrackType.drum)
+      .map(track => ({ ...track, muted: true }));
   }
 
   @computed public get drumInstrumentIds() {
@@ -118,11 +120,18 @@ export default class TrackStore {
   }
 
   @computed public get bassers() {
-    return this.tracks.filter(track => track.type === TrackType.bass);
+    return this.tracks
+      .filter(track => track.type === TrackType.bass)
+      .map(track => ({ ...track, muted: true }));
   }
 
   @computed public get bassersInstrumentIds() {
     return flattenArray(this.bassers.map(track => track.instrument));
+  }
+
+  @computed public get recordings() {
+    return this.tracks
+      .filter(track => track.type === TrackType.recording);
   }
 
   @action _update(track: TrackControlProps) {

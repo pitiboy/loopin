@@ -27,6 +27,8 @@ record
   mic
     https://www.npmjs.com/package/react-mic
     https://github.com/paraself/mic-recorder
+    https://www.npmjs.com/package/react-soundplayer
+    https://www.npmjs.com/package/react-sound
     <!-- https://github.com/leon3s/node-mic-record -->
     <!-- https://www.npmjs.com/package/mic -->
   aux

@@ -10,8 +10,7 @@ import Section from './Layout/Section';
 import PianoKeyboard from './Layout/PianoKeyboard';
 import RootControls from './Controls/RootControls';
 import StoreContext from './model/stores';
-import { ControlButton } from './ControlButton';
-import LooperStyles from './LooperStyles';
+import MicRecorder from './Controls/MicRecorder';
 
 
 const App: React.FC = observer(() => {
@@ -56,9 +55,8 @@ const App: React.FC = observer(() => {
         {trx.bassers.map(chord => <Looper {...chord} key={chord.name} bpm={myBPM * chord.divider} source={({ pitches, duration }) => midiDrums.current && midiDrums.current.playChordNow(chord.instrument, chord.pitches || pitches || [30], duration || 1)} render={SquareLooperRenderer} />)}
 
         <Section title="Voice">
-          <LooperStyles>
-            <ControlButton onClick={() => console.log('clicked')}>Record</ControlButton>
-          </LooperStyles>
+          {trx.recordings.map(chord => <Looper {...chord} key={chord.name} bpm={myBPM * chord.divider} source={({ pitches, duration }) => midiDrums.current && midiDrums.current.playChordNow(chord.instrument, chord.pitches || pitches || [30], duration || 1)} render={SquareLooperRenderer} />)}
+          <MicRecorder />
         </Section>
       </Metronome>
 
