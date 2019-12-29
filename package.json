@@ -1,6 +1,7 @@
 {
   "name": "loopin",
   "version": "0.1.0",
+  "homepage": "https://pitiboy.github.io/loopin",
   "private": true,
   "devDependencies": {
     "@types/jest": "24.0.23",
@@ -16,6 +17,7 @@
   "dependencies": {
     "@types/lodash.get": "^4.4.6",
     "@types/react-mic": "^12.4.0",
+    "gh-pages": "^2.1.1",
     "lodash.get": "^4.4.2",
     "mic-recorder": "^4.9.0",
     "midi-sounds-react": "^1.2.54",
@@ -31,11 +33,14 @@
     "react-scripts": "3.2.0",
     "styled-components": "^4.4.1",
     "typescript": "3.7.2",
+    "vmsg": "^0.3.6",
     "xstate": "^4.7.3"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

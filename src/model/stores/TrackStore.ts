@@ -51,6 +51,7 @@ export default class TrackStore {
     instrument: 1,
     divider: 2,
     playType: PlayTypes.oddQuarter,
+    muted: true, // TODO: disable
   },
   {
     name: 'kickdrum variety',
@@ -58,6 +59,7 @@ export default class TrackStore {
     instrument: 1,
     divider: 2,
     playBeat: [0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1],
+    muted: true, // TODO: disable
   },
   {
     name: 'snaredrum',
@@ -65,6 +67,7 @@ export default class TrackStore {
     instrument: 16,
     divider: 1,
     playType: PlayTypes.even,
+    muted: true, // TODO: disable
   },
   {
     name: 'cin',
@@ -72,6 +75,7 @@ export default class TrackStore {
     instrument: 39,
     divider: 4,
     playType: PlayTypes.even,
+    muted: true, // TODO: disable
   },
   // {
   //   name: 'korgbass',
@@ -90,6 +94,7 @@ export default class TrackStore {
     duration: 1,
     divider: 4,
     playType: PlayTypes.odd,
+    muted: true, // TODO: disable
   },
   {
     name: 'quitar1',
@@ -106,6 +111,7 @@ export default class TrackStore {
       // 0, 30, 0, 32, 36, 0, 30, 0,
       // 0, 30, 0, 0, 30, 30, 0, 0,
     ],
+    muted: true, // TODO: disable
   },
   ];
 

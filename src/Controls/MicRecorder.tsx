@@ -1,11 +1,17 @@
 import React, { useState } from 'react';
-import { ReactMic } from 'react-mic';
+import { Recorder } from 'vmsg';
+// import { ReactMic } from 'react-mic';
 import _ from 'lodash.get';
 // import MicRecorder from 'mic-recorder';
 // import { Machine, interpret } from 'xstate';
 
 import { ControlButton } from '../ControlButton';
 import LooperStyles from '../LooperStyles';
+
+const recorder = new Recorder({
+  wasmURL: 'https://unpkg.com/vmsg@0.3.0/vmsg.wasm',
+});
+
 
 // https://jonbellah.com/articles/xstate-react-hooks/
 // const recordState = Machine({
@@ -66,17 +72,31 @@ export default () => {
   //     });
   // };
 
-  const onStop = (recordedBlob: Blob) => {
-    const blobUrl = _(recordedBlob, 'blobURL', '');
-    setReady(blobUrl);
+  const startRecording = async () => {
+    setRecording(true);
+    await recorder.initAudio();
+    await recorder.initWorker();
+    recorder.startRecording();
   };
+
+  const stopRecording = async () => {
+    setRecording(false);
+    const blob = await recorder.stopRecording();
+    await setReady('');
+    setReady(URL.createObjectURL(blob));
+  };
+
+  // const onStop = (recordedBlob: Blob) => {
+  //   const blobUrl = _(recordedBlob, 'blobURL', '');
+  //   setReady(blobUrl);
+  // };
 
 
   return (
     <LooperStyles>
-      {!recording && <ControlButton onClick={() => setRecording(true)}>Record</ControlButton>}
-      {recording && <ControlButton onClick={() => setRecording(false)}>stop</ControlButton>}
-      <ReactMic
+      {!recording && <ControlButton onClick={() => startRecording()}>Record</ControlButton>}
+      {recording && <ControlButton onClick={() => stopRecording()}>stop</ControlButton>}
+      {/* <ReactMic
         record={recording}
         visualSetting="sinewave" // defaults -> "sinewave".  Other option is "frequencyBars"
         // className={string}       // provide css class name
@@ -84,8 +104,8 @@ export default () => {
         // onData={function}        // called when chunk of audio data is available
         // strokeColor={string}     // sinewave or frequency bar color
         // backgroundColor={string} // background color
-      />
-      {ready && (
+      /> */}
+      {ready && !recording && (
         <audio controls>
           <track kind="captions" />
           <source src={ready} type="audio/webm" />
