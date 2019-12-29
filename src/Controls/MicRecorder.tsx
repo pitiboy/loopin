@@ -1,12 +1,14 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useContext } from 'react';
 import { Recorder } from 'vmsg';
 // import { ReactMic } from 'react-mic';
 // import _ from 'lodash.get';
 // import MicRecorder from 'mic-recorder';
 // import { Machine, interpret } from 'xstate';
 
+import { TrackType, PlayTypes } from '../model/types';
 import { ControlButton } from '../ControlButton';
 import LooperStyles from '../LooperStyles';
+import StoresContext from '../model/stores';
 
 const recorder = new Recorder({
   wasmURL: 'https://unpkg.com/vmsg@0.3.0/vmsg.wasm',
@@ -29,10 +31,11 @@ interface ReactMicStoppedProps {
 
 export default () => {
   const [recording, setRecording] = useState(false);
-  const [ready, setReady] = useState('');
-  const audioRef = useRef(null);
+  // const [ready, setReady] = useState('');
+  const { trx } = useContext(StoresContext);
+  // const audioRef = useRef(null);
   // eslint-disable-next-line no-undef
-  const audio = new Audio();
+  // const audio = new Audio();
 
   // New instance
   // const recorder = new MicRecorder({
@@ -88,9 +91,20 @@ export default () => {
     const blob = await recorder.stopRecording();
     const blobUrl = window.URL.createObjectURL(blob);
     console.log('bloburl', blob.size, blobUrl);
-    await setReady('');
+    trx.add({
+      name: blobUrl.replace(/.*-/, ''),
+      type: TrackType.recording,
+      divider: 1,
+      instrument: 0,
+      blobUrl,
+      playType: PlayTypes.first,
+      playSound: () => console.log('play!'),
+    });
+    // await setReady('');
+
     setTimeout(() => {
-      setReady(blobUrl);
+      // setReady(blobUrl);
+      recorder.close();
     }, 100);
     // setTimeout(() => {
     //   console.log('audioRef', audioRef.current);
@@ -131,12 +145,12 @@ export default () => {
         // strokeColor={string}     // sinewave or frequency bar color
         // backgroundColor={string} // background color
       /> */}
-      {ready && !recording && (
-        <audio ref={audioRef} controls>
+      {/* {ready && !recording && (
+        <audio controls>
           <source src={ready} type="audio/mpeg" />
         </audio>
-      )}
-      <small style={{ flex: '0 0 0' }}>2: {ready}</small>
+      )} */}
+      {/* <small style={{ flex: '0 0 0' }}>{ready}</small> */}
       {/* <audio controls>
         <source src="https://raw.githubusercontent.com/pitiboy/loopin/master/sound/storm-thunder.mp3" type="audio/mp3" />
       </audio> */}

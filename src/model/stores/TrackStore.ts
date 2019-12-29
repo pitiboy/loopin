@@ -14,11 +14,15 @@ export interface PitchedSound {
   duration?: number;
 }
 
-export interface MidiSoundCondfigProps {
+export interface MidiSoundConfigProps {
   instrument: number;
 }
 
-export interface SoundConfigProps extends MidiSoundCondfigProps{
+export interface AudioSoundConfigProps {
+  blobUrl?: string;
+}
+
+export interface SoundConfigProps extends MidiSoundConfigProps, AudioSoundConfigProps{
   type: TrackType;
   divider: number;
   playType?: PlayTypes;
@@ -148,8 +152,9 @@ export default class TrackStore {
     console.log('remove ', track);
   }
 
-  @action _add(track: TrackControlProps) {
+  @action _add(track: TrackProps) {
     console.log('add new ', track);
+    this.tracks = this.tracks.slice().concat(track);
   }
 
   // bind this

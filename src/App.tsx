@@ -55,9 +55,9 @@ const App: React.FC = observer(() => {
         {trx.bassers.map(chord => <Looper {...chord} key={chord.name} bpm={myBPM * chord.divider} source={({ pitches, duration }) => midiDrums.current && midiDrums.current.playChordNow(chord.instrument, chord.pitches || pitches || [30], duration || 1)} render={SquareLooperRenderer} />)}
 
         <Section title="Voice">
-          {trx.recordings.map(chord => <Looper {...chord} key={chord.name} bpm={myBPM * chord.divider} source={({ pitches, duration }) => midiDrums.current && midiDrums.current.playChordNow(chord.instrument, chord.pitches || pitches || [30], duration || 1)} render={SquareLooperRenderer} />)}
           <MicRecorder />
         </Section>
+        {trx.recordings.map(chord => <Looper {...chord} key={chord.name} bpm={myBPM * chord.divider} render={SquareLooperRenderer}><audio controls src={chord.blobUrl} /></Looper>)}
       </Metronome>
 
 

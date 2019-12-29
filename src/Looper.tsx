@@ -32,6 +32,7 @@ export interface LooperProps extends BasicLooperProps {
   bpm?: number;
   looping?: boolean;
   source?: (arg0: PitchedSound) => void;
+  playSound?: () => void;
   step?: number; // needs to be injected
   metronomeBpm?: number;
   render?: (props: LooperRendererProps) => JSX.Element;
@@ -39,12 +40,14 @@ export interface LooperProps extends BasicLooperProps {
   duration?: number;
   name: string;
   muted?: boolean;
+  children?: JSX.Element;
 }
 
 
 // TODO: test
 const generatePlayBeat = ({ playType, rythmLength, multiplier }: GeneratePlayBeatProps): number[] => {
   const length = (rythmLength || 0) * multiplier;
+  // console.log('generatePlayBeat', playType, length, '(', rythmLength, ' || 0) * ', multiplier);
   switch (playType) {
   case PlayTypes.odd:
     return new Array(length).fill(0).map((_qwe, index) => 1 - (index % 2));
@@ -73,11 +76,13 @@ export default ({
   playType = PlayTypes.odd,
   playBeat: originalPlayBeat,
   source,
+  playSound,
   step,
   render: renderProp,
   name,
   duration,
   muted,
+  children,
 }: LooperProps) => {
   const multiplier = (bpm && metronomeBpm && bpm / metronomeBpm) || 1;
   const getStep = (step || 0) * multiplier;
@@ -87,8 +92,9 @@ export default ({
   const setMuted = () => trx.mute({ name, muted: !muted });
 
   const playSource = () => {
-    if (playBeat[getStep] && source && !muted) {
-      source({ pitches: [playBeat[getStep]], duration });
+    if (playBeat[getStep] && !muted) {
+      if (source) source({ pitches: [playBeat[getStep]], duration });
+      if (playSound) playSound();
     }
   };
 
@@ -102,6 +108,7 @@ export default ({
   return (
     <LooperStyles>
       <Name>{name}</Name>
+      {children}
       <LooperControls muted={!!muted} setMuted={setMuted} />
       <LooperRenderer playBeat={playBeat} step={getStep} setPlayBeat={(thisPlayBeat) => setPlayBeat(thisPlayBeat)} />
     </LooperStyles>
