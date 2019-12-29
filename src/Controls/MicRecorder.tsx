@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Recorder } from 'vmsg';
 // import { ReactMic } from 'react-mic';
-import _ from 'lodash.get';
+// import _ from 'lodash.get';
 // import MicRecorder from 'mic-recorder';
 // import { Machine, interpret } from 'xstate';
 
@@ -30,6 +30,11 @@ interface ReactMicStoppedProps {
 export default () => {
   const [recording, setRecording] = useState(false);
   const [ready, setReady] = useState('');
+  const audioRef = useRef(null);
+  const containerRef = useRef(null);
+  // eslint-disable-next-line no-undef
+  const audio = new Audio();
+
   // New instance
   // const recorder = new MicRecorder({
   //   bitRate: 128,
@@ -82,8 +87,30 @@ export default () => {
   const stopRecording = async () => {
     setRecording(false);
     const blob = await recorder.stopRecording();
+    const blobUrl = window.URL.createObjectURL(blob);
+    console.log('bloburl', blob.size, blobUrl);
     await setReady('');
-    setReady(URL.createObjectURL(blob));
+    setTimeout(() => {
+      setReady(blobUrl);
+    }, 1000);
+    setTimeout(() => {
+      console.log('audioRef', audioRef.current);
+      if (audioRef && audioRef.current) {
+        console.log('blob', blob);
+        console.log('audio element', (audioRef.current as unknown as HTMLAudioElement));
+        console.log('audio element', (audioRef.current as unknown as HTMLAudioElement).currentSrc);
+        // (audioRef.current as unknown as HTMLAudioElement).src=blobUrl;
+      }
+    }, 6000);
+    setTimeout(() => {
+      console.log('play audio', audio);
+      if (audio && containerRef.current) {
+        audio.src=blobUrl;
+        audio.controls = true;
+        (containerRef.current as unknown as HTMLElement).appendChild(audio);
+        audio.play().then(() => console.log('played')).catch(e => console.log('play error', e));
+      }
+    }, 10000);
   };
 
   // const onStop = (recordedBlob: Blob) => {
@@ -93,7 +120,7 @@ export default () => {
 
 
   return (
-    <LooperStyles>
+    <LooperStyles ref={containerRef}>
       {!recording && <ControlButton onClick={() => startRecording()}>Record</ControlButton>}
       {recording && <ControlButton onClick={() => stopRecording()}>stop</ControlButton>}
       {/* <ReactMic
@@ -106,11 +133,14 @@ export default () => {
         // backgroundColor={string} // background color
       /> */}
       {ready && !recording && (
-        <audio controls>
-          <track kind="captions" />
-          <source src={ready} type="audio/webm" />
+        <audio ref={audioRef} controls>
+          <source src={ready} type="audio/mpeg" />
         </audio>
       )}
+      <small style={{ flex: '0 0 0' }}>url: {ready}</small>
+      <audio controls>
+        <source src="https://github.com/pitiboy/loopin/blob/master/sound/storm-thunder.mp3" type="audio/mp3" />
+      </audio>
     </LooperStyles>
   );
 };
