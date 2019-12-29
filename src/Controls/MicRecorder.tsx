@@ -31,7 +31,6 @@ export default () => {
   const [recording, setRecording] = useState(false);
   const [ready, setReady] = useState('');
   const audioRef = useRef(null);
-  const containerRef = useRef(null);
   // eslint-disable-next-line no-undef
   const audio = new Audio();
 
@@ -92,7 +91,7 @@ export default () => {
     await setReady('');
     setTimeout(() => {
       setReady(blobUrl);
-    }, 1000);
+    }, 100);
     // setTimeout(() => {
     //   console.log('audioRef', audioRef.current);
     //   if (audioRef && audioRef.current) {
@@ -120,7 +119,7 @@ export default () => {
 
 
   return (
-    <LooperStyles ref={containerRef}>
+    <LooperStyles>
       {!recording && <ControlButton onClick={() => startRecording()}>Record</ControlButton>}
       {recording && <ControlButton onClick={() => stopRecording()}>stop</ControlButton>}
       {/* <ReactMic
@@ -137,7 +136,7 @@ export default () => {
           <source src={ready} type="audio/mpeg" />
         </audio>
       )}
-      <small style={{ flex: '0 0 0' }}>{ready}</small>
+      <small style={{ flex: '0 0 0' }}>2: {ready}</small>
       {/* <audio controls>
         <source src="https://raw.githubusercontent.com/pitiboy/loopin/master/sound/storm-thunder.mp3" type="audio/mp3" />
       </audio> */}
