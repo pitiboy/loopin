@@ -93,24 +93,24 @@ export default () => {
     setTimeout(() => {
       setReady(blobUrl);
     }, 1000);
-    setTimeout(() => {
-      console.log('audioRef', audioRef.current);
-      if (audioRef && audioRef.current) {
-        console.log('blob', blob);
-        console.log('audio element', (audioRef.current as unknown as HTMLAudioElement));
-        console.log('audio element', (audioRef.current as unknown as HTMLAudioElement).currentSrc);
-        // (audioRef.current as unknown as HTMLAudioElement).src=blobUrl;
-      }
-    }, 6000);
-    setTimeout(() => {
-      console.log('play audio', audio);
-      if (audio && containerRef.current) {
-        audio.src=blobUrl;
-        audio.controls = true;
-        (containerRef.current as unknown as HTMLElement).appendChild(audio);
-        audio.play().then(() => console.log('played')).catch(e => console.log('play error', e));
-      }
-    }, 10000);
+    // setTimeout(() => {
+    //   console.log('audioRef', audioRef.current);
+    //   if (audioRef && audioRef.current) {
+    //     console.log('blob', blob);
+    //     console.log('audio element', (audioRef.current as unknown as HTMLAudioElement));
+    //     console.log('audio element', (audioRef.current as unknown as HTMLAudioElement).currentSrc);
+    //     // (audioRef.current as unknown as HTMLAudioElement).src=blobUrl;
+    //   }
+    // }, 6000);
+    // setTimeout(() => {
+    //   console.log('play audio', audio);
+    //   if (audio && containerRef.current) {
+    //     audio.src=blobUrl;
+    //     audio.controls = true;
+    //     (containerRef.current as unknown as HTMLElement).appendChild(audio);
+    //     audio.play().then(() => console.log('played')).catch(e => console.log('play error', e));
+    //   }
+    // }, 10000);
   };
 
   // const onStop = (recordedBlob: Blob) => {
@@ -137,10 +137,10 @@ export default () => {
           <source src={ready} type="audio/mpeg" />
         </audio>
       )}
-      <small style={{ flex: '0 0 0' }}>url: {ready}</small>
-      <audio controls>
-        <source src="https://github.com/pitiboy/loopin/blob/master/sound/storm-thunder.mp3" type="audio/mp3" />
-      </audio>
+      <small style={{ flex: '0 0 0' }}>{ready}</small>
+      {/* <audio controls>
+        <source src="https://raw.githubusercontent.com/pitiboy/loopin/master/sound/storm-thunder.mp3" type="audio/mp3" />
+      </audio> */}
     </LooperStyles>
   );
 };
