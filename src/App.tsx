@@ -57,7 +57,7 @@ const App: React.FC = observer(() => {
         <Section title="Voice">
           <MicRecorder />
         </Section>
-        {trx.recordings.map(chord => <Looper {...chord} key={chord.name} bpm={myBPM * chord.divider} render={SquareLooperRenderer}><audio controls src={chord.blobUrl} /></Looper>)}
+        {trx.recordings.map(chord => <Looper {...chord} key={chord.name} bpm={myBPM * chord.divider} render={SquareLooperRenderer}><audio id={chord.name} controls src={chord.blobUrl} /></Looper>)}
       </Metronome>
 
 

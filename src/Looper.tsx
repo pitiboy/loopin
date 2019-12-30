@@ -107,8 +107,10 @@ export default ({
 
   return (
     <LooperStyles>
-      <Name>{name}</Name>
-      {children}
+      <Name>
+        {name}
+        {children}
+      </Name>
       <LooperControls muted={!!muted} setMuted={setMuted} />
       <LooperRenderer playBeat={playBeat} step={getStep} setPlayBeat={(thisPlayBeat) => setPlayBeat(thisPlayBeat)} />
     </LooperStyles>

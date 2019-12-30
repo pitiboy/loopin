@@ -90,15 +90,27 @@ export default () => {
     setRecording(false);
     const blob = await recorder.stopRecording();
     const blobUrl = window.URL.createObjectURL(blob);
-    console.log('bloburl', blob.size, blobUrl);
+    const name = `au${blobUrl.replace(/.*-/, '')}`;
+    // console.log('bloburl', blob.size, blobUrl, name);
     trx.add({
-      name: blobUrl.replace(/.*-/, ''),
+      name,
       type: TrackType.recording,
       divider: 1,
       instrument: 0,
       blobUrl,
       playType: PlayTypes.first,
-      playSound: () => console.log('play!'),
+      playSound: () => {
+        const audioNode = document.querySelector(`#${name}`);
+        if (audioNode) {
+          // console.log(audioNode, (audioNode as HTMLAudioElement).paused);
+          try {
+            (audioNode as HTMLAudioElement).currentTime=0; // TODO: not working on Safari
+            (audioNode as HTMLAudioElement).play(); // TODO: not working on Safari
+          } catch (e) {
+            console.error(e);
+          }
+        }
+      },
     });
     // await setReady('');
 

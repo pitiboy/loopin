@@ -18,6 +18,11 @@ export const Name = styled.b`
   width: 100px;
   text-overflow: ellipsis;
   overflow: hidden;
+
+  * {
+    flex: 0 0 auto;
+    max-width: 100px;
+  }
 `;
 
 export default LooperStyles;
