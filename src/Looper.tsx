@@ -21,7 +21,8 @@ export interface MetronomeProps extends MetronomeConfigProps, MetronomeStatusPro
 
 }
 
-export interface GeneratePlayBeatProps extends MetronomeConfigProps, InitialRythmConfigProps {
+export interface GeneratePlayBeatProps extends MetronomeConfigProps {
+  playType?: PlayTypes;
   multiplier: number; // needs to be injected
 }
 
@@ -31,7 +32,7 @@ export interface LooperProps extends MetronomeProps, InitialRythmConfigProps, Tr
   looping?: boolean;
   render?: (props: LooperRendererProps) => JSX.Element;
   control?: (props: LooperControlProps) => JSX.Element;
-  children?: JSX.Element;
+  children?: JSX.Element | null;
   // TODO???: refactor similar as playSound?
   source?: (...args: any) => void;
 }
@@ -113,7 +114,7 @@ export default ({
 
   return (
     <LooperStyles>
-      <ControlRenderer muted={!!muted} setMuted={setMuted} name={name}>{children}</ControlRenderer>
+      <ControlRenderer muted={!!muted} setMuted={setMuted} name={name} type={type} typeConfig={typeConfig}>{children}</ControlRenderer>
       <LooperRenderer rythmConfig={rythmConfig} step={getStep} setPlayBeat={(thisPlayBeat) => setPlayBeat(thisPlayBeat)} />
     </LooperStyles>
   );

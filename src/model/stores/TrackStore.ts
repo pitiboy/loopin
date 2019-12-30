@@ -30,11 +30,11 @@ export interface TrackControlProps {
 export interface TrackTypeProps {
   type: TrackType;
   typeConfig: MidiSoundConfigProps | PitchedMidiSoundConfigProps | AudioSoundConfigProps;
-  divider: number;
 }
 
 export interface InitialRythmConfigProps {
   playType?: PlayTypes;
+  divider: number;
 }
 
 interface FinalRythmConfigProps {

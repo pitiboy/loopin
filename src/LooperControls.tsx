@@ -1,11 +1,11 @@
 import React from 'react';
 import { LooperControlStyles, Name } from './LooperStyles';
 import { ControlButton } from './ControlButton';
-import { TrackControlProps } from './model/stores/TrackStore';
+import { TrackControlProps, TrackTypeProps } from './model/stores/TrackStore';
 
-export interface LooperControlProps extends TrackControlProps {
+export interface LooperControlProps extends TrackControlProps, TrackTypeProps {
   setMuted: (a: boolean) => void;
-  children?: JSX.Element;
+  children?: JSX.Element | null;
 }
 
 export const DefaultLooperControl = ({

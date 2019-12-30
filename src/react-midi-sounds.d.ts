@@ -7,6 +7,10 @@ interface MIDISoundsType {
   player: {
     loader: {
       waitLoad: (func: () => void) => void;
+      drumKeys: () => string[];
+      drumInfo: (intrument: number) => {
+        title: string;
+      };
     };
   };
 }

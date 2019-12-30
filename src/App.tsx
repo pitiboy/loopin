@@ -11,6 +11,7 @@ import PianoKeyboard from './Layout/PianoKeyboard';
 import RootControls from './Controls/RootControls';
 import StoreContext from './model/stores';
 import MicRecorder from './Controls/MicRecorder';
+import MultipleInstrumentSelector from './Controls/Music/MultipleInstrumentSelector';
 
 
 const App: React.FC = observer(() => {
@@ -38,6 +39,8 @@ const App: React.FC = observer(() => {
     }
     setPianoChord(instrument);
   };
+  console.log('midiDrums.current loaded', midiDrums.current);
+  // TODO: function call for MultipleInstrumentSelector;
   return (
     <div className="App">
       set BPM: <input type="number" value={myBPM} onChange={e => setMyBPM(parseInt(e.target.value, 10))} min={30} max={300} />
@@ -46,7 +49,11 @@ const App: React.FC = observer(() => {
         <Section title="Drums">
           <MIDISounds ref={midiDrums} appElementName="root" drums={trx.drumInstrumentIds} />
         </Section>
-        {trx.drums.map(drum => <Looper {...drum} key={drum.name} bpm={myBPM * drum.divider} source={({ instruments }) => (midiDrums.current ? midiDrums.current.playDrumsNow(instruments) : console.warn('MIDI not ready'))} render={SquareLooperRenderer} />)}
+        {trx.drums.map(drum => (
+          <Looper {...drum} key={drum.name} bpm={myBPM * drum.divider} source={({ instruments }) => (midiDrums.current ? midiDrums.current.playDrumsNow(instruments) : console.warn('MIDI not ready'))} render={SquareLooperRenderer}>
+            {midiDrums.current && <MultipleInstrumentSelector midiSounds={midiDrums.current} instrument={drum.typeConfig.instruments[0]} />}
+          </Looper>
+        ))}
 
         <Section title="Bass">
           <MIDISounds ref={midiBass} appElementName="root" instruments={trx.bassersInstrumentIds} />
