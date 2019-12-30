@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import DefaultLooperRenderer from './DefaultLooperRenderer';
-import { LooperControls } from './LooperControls';
-import LooperStyles, { Name } from './LooperStyles';
+import { LooperControlProps, DefaultLooperControl } from './LooperControls';
+import LooperStyles from './LooperStyles';
 import { PlayBeatType, PlayTypes } from './model/types';
 import { PitchedSound } from './model/stores/TrackStore';
 import StoreContext from './model/stores';
@@ -36,6 +36,7 @@ export interface LooperProps extends BasicLooperProps {
   step?: number; // needs to be injected
   metronomeBpm?: number;
   render?: (props: LooperRendererProps) => JSX.Element;
+  control?: (props: LooperControlProps) => JSX.Element;
   playBeat?: PlayBeatType;
   duration?: number;
   name: string;
@@ -79,6 +80,7 @@ export default ({
   playSound,
   step,
   render: renderProp,
+  control: controlProp,
   name,
   duration,
   muted,
@@ -88,6 +90,7 @@ export default ({
   const getStep = (step || 0) * multiplier;
   const { trx } = useContext(StoreContext);
   const LooperRenderer = renderProp || DefaultLooperRenderer;
+  const ControlRenderer = controlProp || DefaultLooperControl;
   const [playBeat, setPlayBeat] = useState((originalPlayBeat && originalPlayBeat.slice())|| generatePlayBeat({ playType, rythmLength, multiplier }));
   const setMuted = () => trx.mute({ name, muted: !muted });
 
@@ -107,11 +110,7 @@ export default ({
 
   return (
     <LooperStyles>
-      <Name>
-        {name}
-        {children}
-      </Name>
-      <LooperControls muted={!!muted} setMuted={setMuted} />
+      <ControlRenderer muted={!!muted} setMuted={setMuted} name={name}>{children}</ControlRenderer>
       <LooperRenderer playBeat={playBeat} step={getStep} setPlayBeat={(thisPlayBeat) => setPlayBeat(thisPlayBeat)} />
     </LooperStyles>
   );

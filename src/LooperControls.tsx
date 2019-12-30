@@ -1,13 +1,22 @@
 import React from 'react';
-import styled from 'styled-components';
+import { LooperControlStyles, Name } from './LooperStyles';
 import { ControlButton } from './ControlButton';
+import { TrackControlProps } from './model/stores/TrackStore';
 
-export const LooperControlStyles = styled.div`
-  display: flex;
-`;
+export interface LooperControlProps extends TrackControlProps {
+  setMuted: (a: boolean) => void;
+  children?: JSX.Element;
+}
 
-export const LooperControls = ({ muted, setMuted }: { muted: boolean; setMuted: (a: boolean) => void; name?: string}) => (
+export const DefaultLooperControl = ({
+  name, muted, setMuted, children,
+}: LooperControlProps) => (
   <LooperControlStyles>
+    <Name>
+      {name}
+      {/* TODO: https://github.com/surikov/midi-sounds-react-examples/blob/master/examples/midi-sounds-example4/src/App.js */}
+      {children}
+    </Name>
     <ControlButton onClick={() => setMuted(!muted)} active={muted}>Mute</ControlButton>
   </LooperControlStyles>
 );

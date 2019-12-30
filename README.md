@@ -29,11 +29,11 @@ record
     <!-- https://github.com/paraself/mic-recorder -->
     <!-- https://www.npmjs.com/package/react-soundplayer -->
     <!-- https://www.npmjs.com/package/react-sound -->
-    https://stackoverflow.com/questions/19815442/how-to-record-audio-on-webpage-ios-android-pc-mac-no-flash
+    <!-- https://stackoverflow.com/questions/19815442/how-to-record-audio-on-webpage-ios-android-pc-mac-no-flash
       https://addpipe.com/simple-recorderjs-demo/
         https://blog.addpipe.com/using-recorder-js-to-capture-wav-audio-in-your-html5-web-site/
     https://github.com/Kagami/vmsg
-    https://github.com/chris-rudmin/opus-recorder
+    https://github.com/chris-rudmin/opus-recorder -->
     <!-- https://github.com/leon3s/node-mic-record -->
     <!-- https://www.npmjs.com/package/mic -->
   aux

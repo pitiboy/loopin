@@ -1,5 +1,8 @@
 import styled from 'styled-components';
-import { LooperControlStyles } from './LooperControls';
+
+export const LooperControlStyles = styled.div`
+  display: flex;
+`;
 
 const LooperStyles = styled.div`
   display: flex;
@@ -24,5 +27,6 @@ export const Name = styled.b`
     max-width: 100px;
   }
 `;
+
 
 export default LooperStyles;

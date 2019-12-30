@@ -67,18 +67,18 @@ export default class TrackStore {
     muted: process.env.REACT_APP_MUTE_ALL_TRACK === 'true', // TODO: disable
   },
   {
-    name: 'snaredrum',
-    type: TrackType.drum,
-    instrument: 16,
-    divider: 1,
-    playType: PlayTypes.even,
-    muted: process.env.REACT_APP_MUTE_ALL_TRACK === 'true', // TODO: disable
-  },
-  {
     name: 'cin',
     type: TrackType.drum,
     instrument: 39,
     divider: 4,
+    playType: PlayTypes.even,
+    muted: process.env.REACT_APP_MUTE_ALL_TRACK === 'true', // TODO: disable
+  },
+  {
+    name: 'snaredrum',
+    type: TrackType.drum,
+    instrument: 16,
+    divider: 1,
     playType: PlayTypes.even,
     muted: process.env.REACT_APP_MUTE_ALL_TRACK === 'true', // TODO: disable
   },
@@ -146,7 +146,7 @@ export default class TrackStore {
   @action _update(track: TrackControlProps) {
     console.log('_update', track);
     this.tracks = this.tracks.slice().map(t => (t.name === track.name ? { ...t, ...track }: t));
-    console.log('this.tracks', this.tracks);
+    // console.log('this.tracks', this.tracks);
   }
 
   @action _remove(track: TrackControlProps) {
