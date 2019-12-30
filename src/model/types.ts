@@ -1,4 +1,5 @@
-export type PlayBeatType = number[];
+// TODO: use more complex arrays!
+export type RythmConfigTypes = number[];
 
 export enum PlayTypes {
   all = 'all',

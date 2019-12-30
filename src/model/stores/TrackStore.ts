@@ -1,41 +1,48 @@
 import {
   computed, observable, action,
 } from 'mobx';
-import { PlayTypes, PlayBeatType, TrackType } from '../types';
+import { PlayTypes, RythmConfigTypes, TrackType } from '../types';
+
+
+export interface MidiSoundConfigProps {
+  instruments: number[];
+}
+
+export interface PitchedMidiSoundConfigProps {
+  instrument: number;
+  pitches?: number[];
+  duration: number;
+}
+
+
+export interface AudioSoundConfigProps {
+  blobUrl: string;
+  playSound: () => void;
+}
+
 
 export interface TrackControlProps {
   name: string;
-  // TODO
+  // TODO other control & config
   muted?: boolean;
 }
 
-export interface PitchedSound {
-  pitches?: number[];
-  duration?: number;
-}
-
-export interface MidiSoundConfigProps {
-  instrument: number;
-}
-
-export interface AudioSoundConfigProps {
-  blobUrl?: string;
-}
-
-export interface SoundConfigProps extends MidiSoundConfigProps, AudioSoundConfigProps{
+export interface TrackTypeProps {
   type: TrackType;
+  typeConfig: MidiSoundConfigProps | PitchedMidiSoundConfigProps | AudioSoundConfigProps;
   divider: number;
+}
+
+export interface InitialRythmConfigProps {
   playType?: PlayTypes;
-  playSound?: () => void;
 }
 
-interface TrackSoundProps extends SoundConfigProps, PitchedSound {
-  // TODO
-  playBeat?: PlayBeatType;
+interface FinalRythmConfigProps {
+  rythmConfig?: RythmConfigTypes;
 }
 
 
-interface TrackProps extends TrackSoundProps, TrackControlProps {
+export interface TrackProps extends TrackControlProps, TrackTypeProps, InitialRythmConfigProps, FinalRythmConfigProps {
 
 }
 
@@ -53,7 +60,9 @@ export default class TrackStore {
   @observable tracks: TrackProps[] = [{
     name: 'kickdrum',
     type: TrackType.drum,
-    instrument: 1,
+    typeConfig: {
+      instruments: [1],
+    },
     divider: 2,
     playType: PlayTypes.oddQuarter,
     muted: process.env.REACT_APP_MUTE_ALL_TRACK === 'true', // TODO: disable
@@ -61,15 +70,19 @@ export default class TrackStore {
   {
     name: 'kickdrum variety',
     type: TrackType.drum,
-    instrument: 1,
+    typeConfig: {
+      instruments: [1],
+    },
     divider: 2,
-    playBeat: [0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1],
+    rythmConfig: [0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1],
     muted: process.env.REACT_APP_MUTE_ALL_TRACK === 'true', // TODO: disable
   },
   {
     name: 'cin',
     type: TrackType.drum,
-    instrument: 39,
+    typeConfig: {
+      instruments: [39],
+    },
     divider: 4,
     playType: PlayTypes.even,
     muted: process.env.REACT_APP_MUTE_ALL_TRACK === 'true', // TODO: disable
@@ -77,7 +90,9 @@ export default class TrackStore {
   {
     name: 'snaredrum',
     type: TrackType.drum,
-    instrument: 16,
+    typeConfig: {
+      instruments: [16],
+    },
     divider: 1,
     playType: PlayTypes.even,
     muted: process.env.REACT_APP_MUTE_ALL_TRACK === 'true', // TODO: disable
@@ -94,9 +109,11 @@ export default class TrackStore {
   {
     name: 'korgbass 2',
     type: TrackType.bass,
-    instrument: 371,
-    pitches: [30],
-    duration: 1,
+    typeConfig: {
+      instrument: 371,
+      pitches: [30],
+      duration: 1,
+    },
     divider: 4,
     playType: PlayTypes.odd,
     muted: process.env.REACT_APP_MUTE_ALL_TRACK === 'true', // TODO: disable
@@ -104,17 +121,16 @@ export default class TrackStore {
   {
     name: 'quitar1',
     type: TrackType.bass,
-    instrument: 307,
-    duration: 1,
+    typeConfig: {
+      instrument: 307,
+      duration: 1,
+    },
     divider: 2,
-    playBeat: [
+    rythmConfig: [
       50, 0, 53, 54, 55, 0, 50, 0,
       50, 0, 53, 54, 55, 0, 50, 0,
       50, 0, 53, 54, 55, 0, 50, 0,
       51, 0, 54, 55, 56, 0, 52, 0,
-      // 0, 30, 0, 0, 32, 0, 30, 0,
-      // 0, 30, 0, 32, 36, 0, 30, 0,
-      // 0, 30, 0, 0, 30, 30, 0, 0,
     ],
     muted: process.env.REACT_APP_MUTE_ALL_TRACK === 'true', // TODO: disable
   },
@@ -122,25 +138,28 @@ export default class TrackStore {
 
   @computed public get drums() {
     return this.tracks
-      .filter(track => track.type === TrackType.drum);
+      .filter(track => track.type === TrackType.drum)
+      .map(track => ({ ...track, typeConfig: track.typeConfig as MidiSoundConfigProps }));
   }
 
   @computed public get drumInstrumentIds() {
-    return flattenArray(this.drums.map(track => track.instrument));
+    return flattenArray(this.drums.map(track => track.typeConfig.instruments));
   }
 
   @computed public get bassers() {
     return this.tracks
-      .filter(track => track.type === TrackType.bass);
+      .filter(track => track.type === TrackType.bass)
+      .map(track => ({ ...track, typeConfig: track.typeConfig as PitchedMidiSoundConfigProps }));
   }
 
   @computed public get bassersInstrumentIds() {
-    return flattenArray(this.bassers.map(track => track.instrument));
+    return flattenArray(this.bassers.map(track => track.typeConfig.instrument));
   }
 
   @computed public get recordings() {
     return this.tracks
-      .filter(track => track.type === TrackType.recording);
+      .filter(track => track.type === TrackType.recording)
+      .map(track => ({ ...track, typeConfig: track.typeConfig as AudioSoundConfigProps }));
   }
 
   @action _update(track: TrackControlProps) {

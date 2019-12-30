@@ -1,47 +1,39 @@
 import React, { useEffect, useState, useContext } from 'react';
-import DefaultLooperRenderer from './DefaultLooperRenderer';
+import DefaultLooperRenderer, { LooperRendererProps } from './DefaultLooperRenderer';
 import { LooperControlProps, DefaultLooperControl } from './LooperControls';
 import LooperStyles from './LooperStyles';
-import { PlayBeatType, PlayTypes } from './model/types';
-import { PitchedSound } from './model/stores/TrackStore';
+import { PlayTypes, TrackType } from './model/types';
+import {
+  MidiSoundConfigProps, PitchedMidiSoundConfigProps, TrackProps, InitialRythmConfigProps, AudioSoundConfigProps,
+} from './model/stores/TrackStore';
 import StoreContext from './model/stores';
 
-export interface BeatStylesProps {
-  active: boolean;
-  enabled?: boolean;
-}
-
-
-export interface LooperRendererProps {
-  playBeat: PlayBeatType;
-  step: number;
-  setPlayBeat?: (playBeat: PlayBeatType) => void;
-}
-
-
-export interface BasicLooperProps {
-  playType?: PlayTypes;
+export interface MetronomeConfigProps {
   rythmLength?: number; // needs to be injected
 }
+export interface MetronomeStatusProps {
+  // coming from metronome
+  metronomeBpm?: number;
+  step?: number; // needs to be injected
+}
 
-export interface GeneratePlayBeatProps extends BasicLooperProps {
+export interface MetronomeProps extends MetronomeConfigProps, MetronomeStatusProps {
+
+}
+
+export interface GeneratePlayBeatProps extends MetronomeConfigProps, InitialRythmConfigProps {
   multiplier: number; // needs to be injected
 }
 
-export interface LooperProps extends BasicLooperProps {
+export interface LooperProps extends MetronomeProps, InitialRythmConfigProps, TrackProps {
+  // own props
   bpm?: number;
   looping?: boolean;
-  source?: (arg0: PitchedSound) => void;
-  playSound?: () => void;
-  step?: number; // needs to be injected
-  metronomeBpm?: number;
   render?: (props: LooperRendererProps) => JSX.Element;
   control?: (props: LooperControlProps) => JSX.Element;
-  playBeat?: PlayBeatType;
-  duration?: number;
-  name: string;
-  muted?: boolean;
   children?: JSX.Element;
+  // TODO???: refactor similar as playSound?
+  source?: (...args: any) => void;
 }
 
 
@@ -70,34 +62,45 @@ const generatePlayBeat = ({ playType, rythmLength, multiplier }: GeneratePlayBea
 
 
 export default ({
-  bpm,
   metronomeBpm,
-  looping = true,
-  rythmLength,
-  playType = PlayTypes.odd,
-  playBeat: originalPlayBeat,
-  source,
-  playSound,
   step,
+  rythmLength,
+
+  bpm,
+  looping = true,
   render: renderProp,
   control: controlProp,
-  name,
-  duration,
-  muted,
   children,
+
+  source, // TODO??? should not be used
+
+  name,
+  muted,
+  type,
+  playType = PlayTypes.odd,
+  rythmConfig: originalPlayBeat,
+  typeConfig,
 }: LooperProps) => {
   const multiplier = (bpm && metronomeBpm && bpm / metronomeBpm) || 1;
   const getStep = (step || 0) * multiplier;
   const { trx } = useContext(StoreContext);
   const LooperRenderer = renderProp || DefaultLooperRenderer;
   const ControlRenderer = controlProp || DefaultLooperControl;
-  const [playBeat, setPlayBeat] = useState((originalPlayBeat && originalPlayBeat.slice())|| generatePlayBeat({ playType, rythmLength, multiplier }));
+  const [rythmConfig, setPlayBeat] = useState((originalPlayBeat && originalPlayBeat.slice())|| generatePlayBeat({ playType, rythmLength, multiplier }));
   const setMuted = () => trx.mute({ name, muted: !muted });
 
   const playSource = () => {
-    if (playBeat[getStep] && !muted) {
-      if (source) source({ pitches: [playBeat[getStep]], duration });
-      if (playSound) playSound();
+    if (rythmConfig[getStep] && !muted) {
+      // TODO: refactor this logic outside to an other function!
+      if (type === TrackType.recording && (typeConfig as AudioSoundConfigProps).playSound) (typeConfig as AudioSoundConfigProps).playSound();
+      if (source && type === TrackType.drum) source(typeConfig as MidiSoundConfigProps);
+      if (source && type === TrackType.bass) {
+        source({
+          ...typeConfig as PitchedMidiSoundConfigProps,
+          pitches: (typeConfig as PitchedMidiSoundConfigProps).pitches || [rythmConfig[getStep]] || [30],
+          duration: (typeConfig as PitchedMidiSoundConfigProps).duration || 1,
+        });
+      }
     }
   };
 
@@ -111,7 +114,7 @@ export default ({
   return (
     <LooperStyles>
       <ControlRenderer muted={!!muted} setMuted={setMuted} name={name}>{children}</ControlRenderer>
-      <LooperRenderer playBeat={playBeat} step={getStep} setPlayBeat={(thisPlayBeat) => setPlayBeat(thisPlayBeat)} />
+      <LooperRenderer rythmConfig={rythmConfig} step={getStep} setPlayBeat={(thisPlayBeat) => setPlayBeat(thisPlayBeat)} />
     </LooperStyles>
   );
 };

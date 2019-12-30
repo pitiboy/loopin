@@ -1,6 +1,19 @@
 import React from 'react';
 import styled from 'styled-components';
-import { LooperRendererProps, BeatStylesProps } from './Looper';
+import { RythmConfigTypes } from './model/types';
+
+
+export interface BeatStylesProps {
+  active: boolean;
+  enabled?: boolean;
+}
+
+
+export interface LooperRendererProps {
+  rythmConfig: RythmConfigTypes;
+  step: number;
+  setPlayBeat?: (rythmConfig: RythmConfigTypes) => void;
+}
 
 
 export const DefaultRythmStyles = styled.div`
@@ -8,14 +21,14 @@ export const DefaultRythmStyles = styled.div`
 `;
 
 export const DefaultBeatStyles = styled.div<BeatStylesProps>`
-  ${props => props.active && `
+  ${props => props.active && `
     color: green;
     font-weight: bold;
   `}
 `;
 
-export default ({ playBeat, step }: LooperRendererProps) => (
+export default ({ rythmConfig, step }: LooperRendererProps) => (
   <DefaultRythmStyles>
-    {(playBeat && playBeat.map((beat, index) => <DefaultBeatStyles active={index === step} key={index}>{beat}</DefaultBeatStyles>)) || null}
+    {(rythmConfig && rythmConfig.map((beat, index) => <DefaultBeatStyles active={index === step} key={index}>{beat}</DefaultBeatStyles>)) || null}
   </DefaultRythmStyles>
 );

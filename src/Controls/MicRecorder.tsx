@@ -94,23 +94,25 @@ export default () => {
     // console.log('bloburl', blob.size, blobUrl, name);
     trx.add({
       name,
-      type: TrackType.recording,
       divider: 1,
-      instrument: 0,
-      blobUrl,
       playType: PlayTypes.first,
-      playSound: () => {
-        const audioNode = document.querySelector(`#${name}`);
-        if (audioNode) {
-          // console.log(audioNode, (audioNode as HTMLAudioElement).paused);
-          try {
-            (audioNode as HTMLAudioElement).currentTime=0; // TODO: not working on Safari
-            (audioNode as HTMLAudioElement).play(); // TODO: not working on Safari
-          } catch (e) {
-            console.error(e);
+      type: TrackType.recording,
+      typeConfig: {
+        blobUrl,
+        playSound: () => {
+          const audioNode = document.querySelector(`#${name}`);
+          if (audioNode) {
+            // console.log(audioNode, (audioNode as HTMLAudioElement).paused);
+            try {
+              (audioNode as HTMLAudioElement).currentTime=0; // TODO: not working on Safari
+              (audioNode as HTMLAudioElement).play(); // TODO: not working on Safari
+            } catch (e) {
+              console.error(e);
+            }
           }
-        }
+        },
       },
+
     });
     // await setReady('');
 

@@ -46,18 +46,18 @@ const App: React.FC = observer(() => {
         <Section title="Drums">
           <MIDISounds ref={midiDrums} appElementName="root" drums={trx.drumInstrumentIds} />
         </Section>
-        {trx.drums.map(drum => <Looper {...drum} key={drum.name} bpm={myBPM * drum.divider} source={() => midiDrums.current && midiDrums.current.playDrumsNow([drum.instrument])} render={SquareLooperRenderer} />)}
+        {trx.drums.map(drum => <Looper {...drum} key={drum.name} bpm={myBPM * drum.divider} source={({ instruments }) => (midiDrums.current ? midiDrums.current.playDrumsNow(instruments) : console.warn('MIDI not ready'))} render={SquareLooperRenderer} />)}
 
         <Section title="Bass">
           <MIDISounds ref={midiBass} appElementName="root" instruments={trx.bassersInstrumentIds} />
           {/* <input type="number" value={bassChord} onChange={e => setBassChord(parseInt(e.target.value, 10))} min={366} max={446} /> */}
         </Section>
-        {trx.bassers.map(chord => <Looper {...chord} key={chord.name} bpm={myBPM * chord.divider} source={({ pitches, duration }) => midiDrums.current && midiDrums.current.playChordNow(chord.instrument, chord.pitches || pitches || [30], duration || 1)} render={SquareLooperRenderer} />)}
+        {trx.bassers.map(chord => <Looper {...chord} key={chord.name} bpm={myBPM * chord.divider} source={({ instrument, pitches, duration }) => (midiBass.current ? midiBass.current.playChordNow(instrument, pitches, duration) : console.warn('MIDI2 not ready'))} render={SquareLooperRenderer} />)}
 
         <Section title="Voice">
           <MicRecorder />
         </Section>
-        {trx.recordings.map(chord => <Looper {...chord} key={chord.name} bpm={myBPM * chord.divider} render={SquareLooperRenderer}><audio id={chord.name} controls src={chord.blobUrl} /></Looper>)}
+        {trx.recordings.map(chord => <Looper {...chord} key={chord.name} bpm={myBPM * chord.divider} render={SquareLooperRenderer}><audio id={chord.name} controls src={chord.typeConfig.blobUrl} /></Looper>)}
       </Metronome>
 
 

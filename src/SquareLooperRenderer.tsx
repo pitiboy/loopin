@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { LooperRendererProps, BeatStylesProps } from './Looper';
+import { LooperRendererProps, BeatStylesProps } from './DefaultLooperRenderer';
 
 
 export const RythmStyles = styled.div`
@@ -31,16 +31,16 @@ export const BeatStyles = styled.button<BeatStylesProps>`
 `;
 
 
-export default ({ playBeat, step, setPlayBeat }: LooperRendererProps) => {
+export default ({ rythmConfig, step, setPlayBeat }: LooperRendererProps) => {
   const updateBeat = (index: number) => {
-    if (!setPlayBeat) return ;
-    const newPlayBeat = playBeat.slice();
+    if (!setPlayBeat) return;
+    const newPlayBeat = rythmConfig.slice();
     newPlayBeat[index] = !newPlayBeat[index] ? 1 : 0;
-    setPlayBeat(newPlayBeat)
+    setPlayBeat(newPlayBeat);
   };
   return (
     <RythmStyles>
-      {(playBeat && playBeat.map((beat, index) => <BeatStyles active={index === step} enabled={beat > 0} key={index} onClick={() => updateBeat(index)}>{beat}</BeatStyles>)) || null}
+      {(rythmConfig && rythmConfig.map((beat, index) => <BeatStyles active={index === step} enabled={beat > 0} key={index} onClick={() => updateBeat(index)}>{beat}</BeatStyles>)) || null}
     </RythmStyles>
   );
-}
+};
