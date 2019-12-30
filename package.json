@@ -38,6 +38,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "start-muted": "REACT_APP_MUTE_ALL_TRACK=true react-scripts start",
     "build": "react-scripts build",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
